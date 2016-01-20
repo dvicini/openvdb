@@ -208,7 +208,7 @@ TestStream::testWrite()
 
     // Stream the grids back in.
     std::istringstream is(ostr.str(), std::ios_base::binary);
-    io::Stream strm(is);
+    io::Stream strm(is, false);
     meta = strm.getMetadata();
     grids = strm.getGrids();
 
@@ -230,7 +230,7 @@ TestStream::testRead()
 
     // Stream the grids back in.
     std::ifstream is(filename, std::ios_base::binary);
-    io::Stream strm(is);
+    io::Stream strm(is, false);
     meta = strm.getMetadata();
     grids = strm.getGrids();
 

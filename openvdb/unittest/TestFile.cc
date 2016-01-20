@@ -816,8 +816,6 @@ TestFile::testGridNaming()
         gridVec[n]->insertMeta("index", Int32Metadata(n));
     }
 
-    const char* filename = "testGridNaming.vdb2";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
 	boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
 	tmpDir.append("testGridNaming.vdb2");
     boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
@@ -944,8 +942,6 @@ TestFile::testEmptyFile()
     using namespace openvdb;
     using namespace openvdb::io;
 
-    const char* filename = "testEmptyFile.vdb2";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
 	boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
 	tmpDir.append("testEmptyFile.vdb2");
     boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
@@ -976,8 +972,6 @@ TestFile::testEmptyGridIO()
 
     typedef Int32Grid GridType;
 
-    const char* filename = "something.vdb2";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
 	boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
 	tmpDir.append("something.vdb2");
     boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
@@ -1408,8 +1402,6 @@ TestFile::testReadGridMetadata()
 
     openvdb::initialize();
 
-    const char* filename = "testReadGridMetadata.vdb2";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
 	boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
 	tmpDir.append("testReadGridMetadata.vdb2");
     boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
@@ -1782,8 +1774,6 @@ TestFile::testReadClippedGrid()
     srcGrids.push_back(fgrid);
     srcGrids.push_back(vgrid);
 
-    const char* filename = "testReadClippedGrid.vdb";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
 	boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
 	tmpDir.append("testReadClippedGrid.vdb");
     boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
@@ -2007,8 +1997,6 @@ TestFile::testNameIterator()
     // Register types.
     openvdb::initialize();
 
-    const char* filename = "testNameIterator.vdb2";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
 	boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
 	tmpDir.append("testNameIterator.vdb2");
     boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
@@ -2085,8 +2073,6 @@ TestFile::testCompression()
     grids.push_back(lsGrid);
     grids.push_back(fogGrid);
 
-    const char* filename = "testCompression.vdb2";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
 	boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
 	tmpDir.append("testCompression.vdb2");
     boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
@@ -2282,9 +2268,6 @@ TestFile::testAsync()
     size_t refFileSize = 0;
     {
         // Write a reference file without using asynchronous I/O.
-        const char* filename = "testAsyncref.vdb";
-        boost::shared_ptr<const char> scopedFile(filename, ::remove);
-        io::File f(filename);
 		boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
 		tmpDir.append("testAsyncref.vdb");
         boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
@@ -2307,11 +2290,9 @@ TestFile::testAsync()
         io::Queue queue;
         for (int i = 1; i < 10; ++i) {
             std::ostringstream ostr;
-            ostr << "testAsync." << i << ".vdb";
 			boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
 			tmpDir.append("testAsync.");
 			ostr <<  tmpDir.string() << i << ".vdb";
-            // ostr << "C:/Users/Steven/AppData/Local/Temp/testAsync." << i << ".vdb";
             const std::string filename = ostr.str();
             io::Queue::Id id = queue.write(grids, io::File(filename), fileMetadata);
             helper.insert(id, filename);
@@ -2346,8 +2327,6 @@ TestFile::testAsync()
 
         for (int i = 1; i < 10; ++i) {
             std::ostringstream ostr;
-            ostr << "testAsync" << i << ".vdb";
-			std::ostringstream ostr;
 			boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
 			tmpDir.append("testAsync.");
 			ostr <<  tmpDir.string() << i << ".vdb";
@@ -2371,8 +2350,6 @@ TestFile::testAsync()
 		tmpA.append("testAsyncIOa.vdb");
 		tmpB.append("testAsyncIOb.vdb");
         boost::shared_ptr<const char>
-            scopedFile1("testAsyncIOa.vdb", ::remove),
-            scopedFile2("testAsyncIOb.vdb", ::remove);
 			scopedFile1(tmpA.string().c_str(), ::remove),
             scopedFile2(tmpB.string().c_str(), ::remove);
         std::ofstream

@@ -47,10 +47,12 @@
 #include <tbb/parallel_reduce.h>
 #include <algorithm> // for std::lower_bound()
 #include <cassert>
-#include <cmath> // for std::isfinite()
+// #include <cmath> // for std::isfinite()
+#include <boost/math/special_functions/fpclassify.hpp> // for isfinite()
 #include <limits>
 #include <sstream>
 
+using namespace boost::math;
 
 namespace openvdb {
 OPENVDB_USE_VERSION_NAMESPACE
@@ -773,7 +775,7 @@ struct Vector<T>::IsFiniteOp
     {
         if (finite) {
             for (SizeType n = range.begin(), N = range.end(); n < N; ++n) {
-                if (!std::isfinite(data[n])) return false;
+                if (!isfinite(data[n])) return false;
             }
         }
         return finite;
@@ -1068,7 +1070,7 @@ struct SparseStencilMatrix<ValueType, STENCIL_SIZE>::IsFiniteOp
             for (SizeType n = range.begin(), N = range.end(); n < N; ++n) {
                 const ConstRow row = mat->getConstRow(n);
                 for (ConstValueIter it = row.cbegin(); it; ++it) {
-                    if (!std::isfinite(*it)) return false;
+                    if (!isfinite(*it)) return false;
                 }
             }
         }
@@ -1524,7 +1526,7 @@ public:
             ValueType diagonal = row.getValue(i);
             ValueType dot = row.dot(mTempVec);
             tmpData[i] = (rData[i] - dot) / diagonal;
-            if (!std::isfinite(tmpData[i])) {
+            if (!isfinite(tmpData[i])) {
                 OPENVDB_LOG_DEBUG_RUNTIME("1 diagonal was " << diagonal);
                 OPENVDB_LOG_DEBUG_RUNTIME("1a diagonal " << row.getValue(i));
             }
@@ -1537,7 +1539,7 @@ public:
             ValueType diagonal = row.getValue(i);
             ValueType dot = row.dot(zVec);
             zData[i] = (tmpData[i] - dot) / diagonal;
-            if (!std::isfinite(zData[i])) {
+            if (!isfinite(zData[i])) {
                 OPENVDB_LOG_DEBUG_RUNTIME("2 diagonal was " << diagonal);
             }
         }
@@ -1743,7 +1745,7 @@ solve(
 
         // <r,z>
         const ValueType rDotZ = rVec.dot(zVec);
-        assert(std::isfinite(rDotZ));
+        assert(isfinite(rDotZ));
 
         if (0 == iteration) {
             // Initialize
@@ -1759,7 +1761,7 @@ solve(
 
         // alpha = <r_{k-1}, z_{k-1}> / <p_{k},q_{k}>
         const ValueType pAp = pVec.dot(qVec);
-        assert(std::isfinite(pAp));
+        assert(isfinite(pAp));
 
         const ValueType alpha = rDotZ / pAp;
         rDotZPrev = rDotZ;
@@ -1782,7 +1784,7 @@ solve(
             result.success = false;
             break;
         }
-        if (!std::isfinite(result.absoluteError)) {
+        if (!isfinite(result.absoluteError)) {
             // Total divergence of solution
             result.success = false;
             break;
