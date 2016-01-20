@@ -33,6 +33,11 @@
 
 #include <string>
 
+#ifdef OPENVDB_USE_GLFW_3
+#define GLFW_INCLUDE_GLU
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#else // if !defined(OPENVDB_USE_GLFW_3)
 #if defined(__APPLE__) || defined(MACOSX)
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
@@ -40,6 +45,8 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #endif
+#include <GL/glfw.h>
+#endif // !defined(OPENVDB_USE_GLFW_3)
 
 
 namespace openvdb_viewer {
