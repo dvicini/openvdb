@@ -4,7 +4,7 @@ set(BOOST_ROOT "C:/Boost/boost_1_57_0")
 set(BOOST_INCLUDEDIR "C:/Boost/boost_1_57_0")
 set(BOOST_LIBRARYDIR "C:/Boost/boost_1_57_0/lib")
 
-set(Boost_DEBUG ON)
+set(Boost_DEBUG OFF)
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
@@ -21,7 +21,7 @@ if(Boost_FOUND)
 endif()
 
 # this is where my modules are located, change per site
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} e:/library/development/CMake/Modules)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} c:/dev_local/CMake/Modules)
 
 set(ILMBase_ROOT "C:/Program Files/ILMBase")
 
@@ -38,7 +38,7 @@ endif()
 
 # using FindTBB.cmake from Pixar's OpenSubdiv project
 # https://github.com/PixarAnimationStudios/OpenSubdiv
-set(TBB_LOCATION "e:/library/development/tbb/tbb41_20130116oss")
+set(TBB_LOCATION "c:/dev_local/tbb/tbb41_20130116oss")
 
 find_package(tbb REQUIRED)
 
@@ -49,7 +49,7 @@ if(TBB_FOUND)
   message(STATUS "TBB LIBRARIES: " ${TBB_LIBRARIES})
 endif()
 
-set(ZLIB_ROOT "e:/library/development/zlib/zlib-1.2.5")
+set(ZLIB_ROOT "C:/Program Files/ZLIB")
 
 find_package(zlib REQUIRED)
 
@@ -60,7 +60,15 @@ if(ZLIB_FOUND)
   message(STATUS "ZLIB LIBRARIES: " ${ZLIB_LIBRARIES})
 endif()
 
-#find_package(blosc)
+set(BLOSC_ROOT "C:/Program Files/blosc")
+
+find_package(blosc)
+
+if(BLOSC_FOUND)
+  message(STATUS "BLOSC FOUND: " ${BLOSC_FOUND})
+  message(STATUS "BLOSC INCLUDE DIR: " ${BLOSC_INCLUDE_DIR})
+  message(STATUS "BLOSC LIBRARY: " ${BLOSC_LIBRARY})
+endif()
 
 # collect source files
 file(GLOB H_FILES *.h
@@ -82,14 +90,16 @@ set(SOURCE_FILES ${H_FILES} ${CXX_FILES})
 if(WIN32)
   add_definitions(-DNOMINMAX -DOPENVDB_STATICLIB
       -DOPENVDB_PRIVATE -DHALF_EXPORTS
-      -DOPENVDB_DLL -DBOOST_ALL_NO_LIB)
+      -DOPENVDB_DLL -DBOOST_ALL_NO_LIB
+      -DOPENVDB_USE_BLOSC)
 endif()
 
 include_directories(
     ${ILMBASE_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
     ${TBB_INCLUDE_DIR}
-    ${ZLIB_INCLUDE_DIRS})
+    ${ZLIB_INCLUDE_DIRS}
+    ${BLOSC_INCLUDE_DIR})
 
 add_library(openvdb ${SOURCE_FILES})
 
@@ -101,11 +111,12 @@ target_link_libraries(openvdb
     optimized ${TBB_tbb_LIBRARY}
     optimized ${TBB_tbbmalloc_LIBRARY}
     optimized ${TBB_tbbmalloc_proxy_LIBRARY}
-	debug ${TBB_tbb_debug_LIBRARY}
+  debug ${TBB_tbb_debug_LIBRARY}
     debug ${TBB_tbbmalloc_debug_LIBRARY}
     debug ${TBB_tbbmalloc_proxy_debug_LIBRARY}
     ${ZLIB_LIBRARIES}
-	debug ${BOOST_LIBRARYDIR}/libboost_iostreams-vc110-mt-gd-1_57.lib
+    ${BLOSC_LIBRARY}
+  debug ${BOOST_LIBRARYDIR}/libboost_iostreams-vc110-mt-gd-1_57.lib
     debug ${BOOST_LIBRARYDIR}/libboost_system-vc110-mt-gd-1_57.lib
     debug ${BOOST_LIBRARYDIR}/libboost_thread-vc110-mt-gd-1_57.lib)
 
@@ -116,15 +127,16 @@ if(WIN32)
 endif()
 
 install(TARGETS openvdb DESTINATION lib)
+#INSTALL(FILES ${H_FILES} DESTINATION include/openvdb)
 
 foreach(HEADER ${H_FILES})
   get_filename_component(DIR ${HEADER} PATH)
   get_filename_component(SUBDIR ${DIR} NAME)
   if(SUBDIR STREQUAL "openvdb")
-    install(FILES ${HEADER} DESTINATION
+  install(FILES ${HEADER} DESTINATION
         include/openvdb)
   else()
-    install(FILES ${HEADER} DESTINATION
+  install(FILES ${HEADER} DESTINATION
         include/openvdb/${SUBDIR})
   endif()
 endforeach(HEADER HEADERS)
@@ -132,4 +144,5 @@ endforeach(HEADER HEADERS)
 add_subdirectory(cmd/openvdb_print)
 add_subdirectory(cmd/openvdb_view)
 add_subdirectory(cmd/openvdb_render)
+add_subdirectory(cmd/openvdb_perf)
 add_subdirectory(unittest)
