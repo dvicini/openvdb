@@ -34,6 +34,7 @@
 
 #ifdef OPENVDB_USE_GLFW_3
 #define GLFW_INCLUDE_GLU
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #else // if !defined(OPENVDB_USE_GLFW_3)
 #if defined(__APPLE__) || defined(MACOSX)

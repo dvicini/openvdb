@@ -46,10 +46,13 @@
 #include <vector>
 #include <limits>
 #include <boost/thread/thread.hpp>
-#include <time.h> // for nanosleep()
+//#include <time.h> // for nanosleep()
+#include <thread>
+#include <chrono>
 
 #ifdef OPENVDB_USE_GLFW_3
-//#define GLFW_INCLUDE_GLU
+#define GLFW_INCLUDE_GLU
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #else // if !defined(OPENVDB_USE_GLFW_3)
 #if defined(__APPLE__) || defined(MACOSX)
@@ -685,6 +688,11 @@ ViewerImpl::view(const openvdb::GridCPtrVec& gridList)
     swapBuffers();
     setNeedsDisplay();
 
+    GLenum err = glewInit();
+    if (GLEW_OK != err)
+    {
+        fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+    }
 
     //////////
 
@@ -835,8 +843,9 @@ ViewerImpl::sleep(double secs)
 {
     secs = fabs(secs);
     int isecs = int(secs);
-    struct timespec sleepTime = { isecs /*sec*/, int(1.0e9 * (secs - isecs)) /*nsec*/ };
-    nanosleep(&sleepTime, /*remainingTime=*/NULL);
+    //struct timespec sleepTime = { isecs /*sec*/, int(1.0e9 * (secs - isecs)) /*nsec*/ };
+    //nanosleep(&sleepTime, /*remainingTime=*/NULL);
+    std::this_thread::sleep_for(std::chrono::nanoseconds(int(1.0e9 * (secs - isecs))));
 }
 
 
