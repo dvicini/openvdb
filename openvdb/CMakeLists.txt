@@ -68,6 +68,7 @@ if(BLOSC_FOUND)
   message(STATUS "BLOSC FOUND: " ${BLOSC_FOUND})
   message(STATUS "BLOSC INCLUDE DIR: " ${BLOSC_INCLUDE_DIR})
   message(STATUS "BLOSC LIBRARY: " ${BLOSC_LIBRARY})
+  message(STATUS "BLOSC STATIC LIBRARY: " ${BLOSC_STATIC_LIBRARY})
 endif()
 
 # collect source files
@@ -107,18 +108,20 @@ target_link_libraries(openvdb
     optimized ${BOOST_LIBRARYDIR}/libboost_iostreams-vc110-mt-1_57.lib
     optimized ${BOOST_LIBRARYDIR}/libboost_system-vc110-mt-1_57.lib
     optimized ${BOOST_LIBRARYDIR}/libboost_thread-vc110-mt-1_57.lib
-    ${ILMBASE_Half_LIBRARY}
+    optimized ${ILMBASE_Half_LIBRARY}
     optimized ${TBB_tbb_LIBRARY}
     optimized ${TBB_tbbmalloc_LIBRARY}
     optimized ${TBB_tbbmalloc_proxy_LIBRARY}
+    ${ZLIB_LIBRARIES}
+    optimized ${BLOSC_STATIC_LIBRARY}
+    debug ${BOOST_LIBRARYDIR}/libboost_iostreams-vc110-mt-gd-1_57.lib
+    debug ${BOOST_LIBRARYDIR}/libboost_system-vc110-mt-gd-1_57.lib
+    debug ${BOOST_LIBRARYDIR}/libboost_thread-vc110-mt-gd-1_57.lib
+    debug ${ILMBASE_LIBRARY_DIRS}/Halfd.lib
     debug ${TBB_tbb_debug_LIBRARY}
     debug ${TBB_tbbmalloc_debug_LIBRARY}
     debug ${TBB_tbbmalloc_proxy_debug_LIBRARY}
-    ${ZLIB_LIBRARIES}
-    ${BLOSC_LIBRARY}
-    debug ${BOOST_LIBRARYDIR}/libboost_iostreams-vc110-mt-gd-1_57.lib
-    debug ${BOOST_LIBRARYDIR}/libboost_system-vc110-mt-gd-1_57.lib
-    debug ${BOOST_LIBRARYDIR}/libboost_thread-vc110-mt-gd-1_57.lib)
+    debug ${BLOSC_DEBUG_STATIC_LIBRARY})
 
 if(WIN32)
   set_target_properties(openvdb

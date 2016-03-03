@@ -21,10 +21,13 @@ add_definitions()
 add_executable(openvdb_render ${SOURCE_FILES})
 
 target_link_libraries(openvdb_render openvdb
-	${ILMBASE_IlmThread_LIBRARY}
-	${ILMBASE_Iex_LIBRARY}
-	${OPENEXR_IlmImf_LIBRARY}
-	)
+    optimized ${ILMBASE_IlmThread_LIBRARY}
+    optimized ${ILMBASE_Iex_LIBRARY}
+    optimized ${OPENEXR_IlmImf_LIBRARY}
+    debug ${ILMBASE_LIBRARY_DIRS}/IlmThreadd.lib
+    debug ${ILMBASE_LIBRARY_DIRS}/Iexd.lib
+    debug ${OPENEXR_LIBRARY_DIRS}/IlmImfd.lib
+    )
 
 # if(WIN32)
 #   set_target_properties(openvdb_render
