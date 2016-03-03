@@ -74,7 +74,7 @@ void
 TestPoissonSolver::testIndexTree()
 {
     using namespace openvdb;
-    using tools::poisson::VIndex;
+    using openvdb::tools::poisson::VIndex;
 
     typedef FloatTree::ValueConverter<VIndex>::Type VIdxTree;
     typedef VIdxTree::LeafNodeType LeafNodeType;
@@ -107,29 +107,29 @@ void
 TestPoissonSolver::testTreeToVectorToTree()
 {
     using namespace openvdb;
-    using tools::poisson::VIndex;
+    using openvdb::tools::poisson::VIndex;
 
     typedef FloatTree::ValueConverter<VIndex>::Type VIdxTree;
 
-    FloatGrid::Ptr sphere = tools::createLevelSetSphere<FloatGrid>(
+    FloatGrid::Ptr sphere = openvdb::tools::createLevelSetSphere<FloatGrid>(
         /*radius=*/10.f, /*center=*/Vec3f(0.f), /*voxelSize=*/0.25f);
-    tools::sdfToFogVolume(*sphere);
+    openvdb::tools::sdfToFogVolume(*sphere);
     FloatTree& inputTree = sphere->tree();
 
     const Index64 numVoxels = inputTree.activeVoxelCount();
 
     // Generate an index tree.
-    VIdxTree::Ptr indexTree = tools::poisson::createIndexTree(inputTree);
+    VIdxTree::Ptr indexTree = openvdb::tools::poisson::createIndexTree(inputTree);
     CPPUNIT_ASSERT(bool(indexTree));
 
     // Copy the values of the active voxels of the tree into a vector.
     math::pcg::VectorS::Ptr vec =
-        tools::poisson::createVectorFromTree<float>(inputTree, *indexTree);
+        openvdb::tools::poisson::createVectorFromTree<float>(inputTree, *indexTree);
     CPPUNIT_ASSERT_EQUAL(math::pcg::SizeType(numVoxels), vec->size());
 
     {
         // Convert the vector back to a tree.
-        FloatTree::Ptr inputTreeCopy = tools::poisson::createTreeFromVector(
+        FloatTree::Ptr inputTreeCopy = openvdb::tools::poisson::createTreeFromVector(
             *vec, *indexTree, /*bg=*/0.f);
 
         // Check that voxel values were preserved.
@@ -150,7 +150,7 @@ void
 TestPoissonSolver::testLaplacian()
 {
     using namespace openvdb;
-    using tools::poisson::VIndex;
+    using openvdb::tools::poisson::VIndex;
 
     typedef FloatTree::ValueConverter<VIndex>::Type VIdxTree;
 
@@ -173,12 +173,12 @@ TestPoissonSolver::testLaplacian()
         const Index64 numVoxels = inputTree.activeVoxelCount();
 
         // Generate an index tree.
-        VIdxTree::Ptr indexTree = tools::poisson::createIndexTree(inputTree);
+        VIdxTree::Ptr indexTree = openvdb::tools::poisson::createIndexTree(inputTree);
         CPPUNIT_ASSERT(bool(indexTree));
 
         // Copy the values of the active voxels of the tree into a vector.
         math::pcg::VectorS::Ptr source =
-            tools::poisson::createVectorFromTree<float>(inputTree, *indexTree);
+            openvdb::tools::poisson::createVectorFromTree<float>(inputTree, *indexTree);
         CPPUNIT_ASSERT_EQUAL(math::pcg::SizeType(numVoxels), source->size());
 
         // Create a mask of the interior voxels of the source tree.
@@ -187,8 +187,8 @@ TestPoissonSolver::testLaplacian()
 
         // Compute the Laplacian of the source:
         //     D^2 sin(i) * sin(j) * sin(k) = -3 sin(i) * sin(j) * sin(k)
-        tools::poisson::LaplacianMatrix::Ptr laplacian =
-            tools::poisson::createISLaplacian(*indexTree, interiorMask);
+        openvdb::tools::poisson::LaplacianMatrix::Ptr laplacian =
+            openvdb::tools::poisson::createISLaplacian(*indexTree, interiorMask);
         laplacian->scale(1.0 / (delta * delta)); // account for voxel spacing
         CPPUNIT_ASSERT_EQUAL(math::pcg::SizeType(numVoxels), laplacian->size());
 
@@ -213,15 +213,15 @@ TestPoissonSolver::testSolve()
 {
     using namespace openvdb;
 
-    FloatGrid::Ptr sphere = tools::createLevelSetSphere<FloatGrid>(
+    FloatGrid::Ptr sphere = openvdb::tools::createLevelSetSphere<FloatGrid>(
         /*radius=*/10.f, /*center=*/Vec3f(0.f), /*voxelSize=*/0.25f);
-    tools::sdfToFogVolume(*sphere);
+    openvdb::tools::sdfToFogVolume(*sphere);
 
     math::pcg::State result = math::pcg::terminationDefaults<float>();
     result.iterations = 100;
     result.relativeError = result.absoluteError = 1.0e-4;
 
-    FloatTree::Ptr outTree = tools::poisson::solve(sphere->tree(), result);
+    FloatTree::Ptr outTree = openvdb::tools::poisson::solve(sphere->tree(), result);
 
     CPPUNIT_ASSERT(result.success);
     CPPUNIT_ASSERT(result.iterations < 60);
@@ -282,7 +282,7 @@ doTestSolveWithBoundaryConditions()
 
     util::NullInterrupter interrupter;
 
-    typename TreeType::Ptr solution = tools::poisson::solveWithBoundaryConditions(
+    typename TreeType::Ptr solution = openvdb::tools::poisson::solveWithBoundaryConditions(
         source, BoundaryOp(), state, interrupter);
 
     CPPUNIT_ASSERT(state.success);
@@ -340,9 +340,9 @@ namespace {
         
 
         math::Transform::Ptr xform = math::Transform::createLinearTransform(dx);
-        FloatGrid::Ptr cubeLS = tools::createLevelSetBox<FloatGrid>( outerBBox, *xform);
-        FloatGrid::Ptr inside = tools::createLevelSetBox<FloatGrid>( innerBBox, *xform);
-        tools::csgDifference(*cubeLS, *inside);
+        FloatGrid::Ptr cubeLS = openvdb::tools::createLevelSetBox<FloatGrid>( outerBBox, *xform);
+        FloatGrid::Ptr inside = openvdb::tools::createLevelSetBox<FloatGrid>( innerBBox, *xform);
+        openvdb::tools::csgDifference(*cubeLS, *inside);
 
         return cubeLS;
     }
@@ -389,7 +389,7 @@ TestPoissonSolver::testSolveWithSegmentDomain()
 
     using namespace openvdb;
 
-    typedef math::pcg::IncompleteCholeskyPreconditioner<tools::poisson::LaplacianMatrix>    PreconditionerType;
+    typedef math::pcg::IncompleteCholeskyPreconditioner<openvdb::tools::poisson::LaplacianMatrix>    PreconditionerType;
 
     // In fluid simulations, incomprehensibility is enforced by the pressure, which in turn is computed as a solution of a Poisson equation.
     // Often procedural animation of objects (e.g. characters) interacting with liquid will result in boundary conditions that describe
@@ -438,8 +438,8 @@ TestPoissonSolver::testSolveWithSegmentDomain()
         
         // // Union the cubes into the opencube grid
         
-        tools::csgUnion(*openDomain, *closedDomain0);
-        tools::csgUnion(*openDomain, *closedDomain1);
+        openvdb::tools::csgUnion(*openDomain, *closedDomain0);
+        openvdb::tools::csgUnion(*openDomain, *closedDomain1);
         
         // rename.
         
@@ -485,7 +485,7 @@ TestPoissonSolver::testSolveWithSegmentDomain()
     // Extract the "interior regions" from the solidBoundary.  
     // The result will correspond to the the walls of the boxes union-ed with inside of the full box.
     
-    BoolTree::Ptr interiorMask = tools::extractEnclosedRegion(solidBoundary->tree(), float(0) /*isovalue*/, &totalSourceDomain);
+    BoolTree::Ptr interiorMask = openvdb::tools::extractEnclosedRegion(solidBoundary->tree(), float(0) /*isovalue*/, &totalSourceDomain);
                                             
     
     // Identify the  well-posed part of the problem 
@@ -512,7 +512,7 @@ TestPoissonSolver::testSolveWithSegmentDomain()
     // Compute the solution
 
     FloatTree::Ptr wellPosedSolutionP   = 
-        tools::poisson::solveWithBoundaryConditionsAndPreconditioner<PreconditionerType>(source,
+        openvdb::tools::poisson::solveWithBoundaryConditionsAndPreconditioner<PreconditionerType>(source,
                                                                                          wellPosedDomain,
                                                                                          boundaryOp, 
                                                                                          state, interrupter);
@@ -551,7 +551,7 @@ TestPoissonSolver::testSolveWithSegmentDomain()
            
         // Solve for Poisson equation in the two unconnected regions
         FloatTree::Ptr illPosedSoln = 
-            tools::poisson::solveWithBoundaryConditionsAndPreconditioner<PreconditionerType>(source, illPosedDomain, 
+            openvdb::tools::poisson::solveWithBoundaryConditionsAndPreconditioner<PreconditionerType>(source, illPosedDomain, 
                                                                                              LSBoundaryOp(*solidBoundary->tree()), 
                                                                                              state, interrupt); 
     }

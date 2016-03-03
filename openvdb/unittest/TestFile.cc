@@ -30,6 +30,7 @@
 
 #include <boost/bind.hpp>
 #include <boost/uuid/uuid_generators.hpp>
+#include <boost/filesystem.hpp>
 #include <cppunit/extensions/HelperMacros.h>
 #include <tbb/tbb_thread.h> // for tbb::this_tbb_thread::sleep()
 #include <openvdb/Exceptions.h>
@@ -816,19 +817,21 @@ TestFile::testGridNaming()
     }
 
     const char* filename = "testGridNaming.vdb2";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
+    boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
+    tmpDir.append(filename);
+    boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
 
     // Test first with grid instancing disabled, then with instancing enabled.
     for (int instancing = 0; instancing <= 1; ++instancing) {
         {
             // Write the grids out to a file.
-            File file(filename);
+            File file(tmpDir.string());
             file.setInstancingEnabled(instancing);
             file.write(gridVec);
         }
 
         // Open the file for reading.
-        File file(filename);
+        File file(tmpDir.string());
         file.setInstancingEnabled(instancing);
         file.open();
 
@@ -901,10 +904,10 @@ TestFile::testGridNaming()
         const openvdb::Name weirdName("grid[4]");
         gridVec[0]->setName(weirdName);
         {
-            File file(filename);
+            File file(tmpDir.string());
             file.write(gridVec);
         }
-        File file(filename);
+        File file(tmpDir.string());
         file.open();
 
         // Verify that the grid can be read and that its index is 0.
@@ -941,13 +944,15 @@ TestFile::testEmptyFile()
     using namespace openvdb::io;
 
     const char* filename = "testEmptyFile.vdb2";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
+    boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
+    tmpDir.append(filename);
+    boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
 
     {
-        File file(filename);
+        File file(tmpDir.string());
         file.write(GridPtrVec(), MetaMap());
     }
-    File file(filename);
+    File file(tmpDir.string());
     file.open();
 
     GridPtrVecPtr grids = file.getGrids();
@@ -970,9 +975,11 @@ TestFile::testEmptyGridIO()
     typedef Int32Grid GridType;
 
     const char* filename = "something.vdb2";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
+    boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
+    tmpDir.append(filename);
+    boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
 
-    File file(filename);
+    File file(tmpDir.string());
 
     std::ostringstream ostr(std::ios_base::binary);
 
@@ -1017,7 +1024,7 @@ TestFile::testEmptyGridIO()
     math::NonlinearFrustumMap::registerMap();
 
     // Read in the grid descriptors.
-    File file2(filename);
+    File file2(tmpDir.string());
     std::istringstream istr(ostr.str(), std::ios_base::binary);
     io::setCurrentVersion(istr);
     file2.readGridDescriptors(istr);
@@ -1399,7 +1406,9 @@ TestFile::testReadGridMetadata()
     openvdb::initialize();
 
     const char* filename = "testReadGridMetadata.vdb2";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
+    boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
+    tmpDir.append(filename);
+    boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
 
     // Create grids
     Int32Grid::Ptr igrid = createGrid<Int32Grid>(/*bg=*/1);
@@ -1437,16 +1446,16 @@ TestFile::testReadGridMetadata()
     {
         if (outputMethod == OUTPUT_TO_FILE) {
             // Write the grids to a file.
-            io::File vdbfile(filename);
+            io::File vdbfile(tmpDir.string());
             vdbfile.write(srcGrids);
         } else {
             // Stream the grids to a file (i.e., without file offsets).
-            std::ofstream ostrm(filename, std::ios_base::binary);
+            std::ofstream ostrm(tmpDir.string().c_str(), std::ios_base::binary);
             io::Stream(ostrm).write(srcGrids);
         }
 
         // Read just the grid-level metadata from the file.
-        io::File vdbfile(filename);
+        io::File vdbfile(tmpDir.string());
 
         // Verify that reading from an unopened file generates an exception.
         CPPUNIT_ASSERT_THROW(vdbfile.readGridMetadata("igrid"), openvdb::IoError);
@@ -1772,23 +1781,25 @@ TestFile::testReadClippedGrid()
     srcGrids.push_back(vgrid);
 
     const char* filename = "testReadClippedGrid.vdb";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
+    boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
+    tmpDir.append(filename);
+    boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
 
     enum { OUTPUT_TO_FILE = 0, OUTPUT_TO_STREAM = 1 };
     for (int outputMethod = OUTPUT_TO_FILE; outputMethod <= OUTPUT_TO_STREAM; ++outputMethod)
     {
         if (outputMethod == OUTPUT_TO_FILE) {
             // Write the grids to a file.
-            io::File vdbfile(filename);
+            io::File vdbfile(tmpDir.string());
             vdbfile.write(srcGrids);
         } else {
             // Stream the grids to a file (i.e., without file offsets).
-            std::ofstream ostrm(filename, std::ios_base::binary);
+            std::ofstream ostrm(tmpDir.string().c_str(), std::ios_base::binary);
             io::Stream(ostrm).write(srcGrids);
         }
 
         // Open the file for reading.
-        io::File vdbfile(filename);
+        io::File vdbfile(tmpDir.string());
         vdbfile.open();
 
         GridBase::Ptr grid;
@@ -1994,15 +2005,17 @@ TestFile::testNameIterator()
     openvdb::initialize();
 
     const char* filename = "testNameIterator.vdb2";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
+    boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
+    tmpDir.append(filename);
+    boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
 
     // Write the grids out to a file.
     {
-        io::File vdbfile(filename);
+        io::File vdbfile(tmpDir.string());
         vdbfile.write(grids);
     }
 
-    io::File vdbfile(filename);
+    io::File vdbfile(tmpDir.string());
 
     // Verify that name iteration fails if the file is not open.
     CPPUNIT_ASSERT_THROW(vdbfile.beginName(), openvdb::IoError);
@@ -2069,12 +2082,14 @@ TestFile::testCompression()
     grids.push_back(fogGrid);
 
     const char* filename = "testCompression.vdb2";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
+    boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
+    tmpDir.append(filename);
+    boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
 
     size_t uncompressedSize = 0;
     {
         // Write the grids out to a file with compression disabled.
-        io::File vdbfile(filename);
+        io::File vdbfile(tmpDir.string());
         vdbfile.setCompression(io::COMPRESS_NONE);
         vdbfile.write(grids);
         vdbfile.close();
@@ -2082,7 +2097,7 @@ TestFile::testCompression()
         // Get the size of the file in bytes.
         struct stat buf;
         buf.st_size = 0;
-        CPPUNIT_ASSERT_EQUAL(0, ::stat(filename, &buf));
+        CPPUNIT_ASSERT_EQUAL(0, ::stat(tmpDir.string().c_str(), &buf));
         uncompressedSize = buf.st_size;
     }
 
@@ -2093,7 +2108,7 @@ TestFile::testCompression()
     for (uint32_t flags = 0x0; flags <= 0x3; ++flags) {
 
         if (flags != io::COMPRESS_NONE) {
-            io::File vdbfile(filename);
+            io::File vdbfile(tmpDir.string());
             vdbfile.setCompression(flags);
             vdbfile.write(grids);
             vdbfile.close();
@@ -2104,14 +2119,14 @@ TestFile::testCompression()
             size_t compressedSize = 0;
             struct stat buf;
             buf.st_size = 0;
-            CPPUNIT_ASSERT_EQUAL(0, ::stat(filename, &buf));
+            CPPUNIT_ASSERT_EQUAL(0, ::stat(tmpDir.string().c_str(), &buf));
             compressedSize = buf.st_size;
             CPPUNIT_ASSERT(compressedSize < size_t(0.75 * double(uncompressedSize)));
         }
         {
             // Verify that the grids can be read back successfully.
 
-            io::File vdbfile(filename);
+            io::File vdbfile(tmpDir.string());
             vdbfile.open();
 
             GridPtrVecPtr inGrids = vdbfile.getGrids();
@@ -2263,14 +2278,16 @@ TestFile::testAsync()
     {
         // Write a reference file without using asynchronous I/O.
         const char* filename = "testAsyncref.vdb";
-        boost::shared_ptr<const char> scopedFile(filename, ::remove);
-        io::File f(filename);
+        boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
+        tmpDir.append(filename);
+        boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
+        io::File f(tmpDir.string());
         f.write(grids, fileMetadata);
 
         // Record the size of the reference file.
         struct stat buf;
         buf.st_size = 0;
-        CPPUNIT_ASSERT_EQUAL(0, ::stat(filename, &buf));
+        CPPUNIT_ASSERT_EQUAL(0, ::stat(tmpDir.string().c_str(), &buf));
         refFileSize = buf.st_size;
     }
 
@@ -2283,7 +2300,9 @@ TestFile::testAsync()
         io::Queue queue;
         for (int i = 1; i < 10; ++i) {
             std::ostringstream ostr;
-            ostr << "testAsync." << i << ".vdb";
+            boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
+            tmpDir.append("testAsync.");
+            ostr <<  tmpDir.string() << i << ".vdb";
             const std::string filename = ostr.str();
             io::Queue::Id id = queue.write(grids, io::File(filename), fileMetadata);
             helper.insert(id, filename);
@@ -2333,9 +2352,15 @@ TestFile::testAsync()
         io::Queue queue(/*capacity=*/1);
         queue.setTimeout(0/*sec*/);
 
+        boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
+        boost::filesystem::path tmpA(tmpDir);
+        boost::filesystem::path tmpB(tmpDir);
+        tmpA.append("testAsyncIOa.vdb");
+        tmpB.append("testAsyncIOb.vdb");
+
         boost::shared_ptr<const char>
-            scopedFile1("testAsyncIOa.vdb", ::remove),
-            scopedFile2("testAsyncIOb.vdb", ::remove);
+            scopedFile1(tmpA.string().c_str(), ::remove),
+            scopedFile2(tmpB.string().c_str(), ::remove);
         std::ofstream
             file1(scopedFile1.get()),
             file2(scopedFile2.get());

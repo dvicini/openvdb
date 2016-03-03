@@ -32,6 +32,7 @@
 #include <fstream>
 #include <sstream>
 #include <cppunit/extensions/HelperMacros.h>
+#include <boost/filesystem.hpp>
 #include <openvdb/Exceptions.h>
 #include <openvdb/Types.h>
 #include <openvdb/math/Transform.h>
@@ -881,14 +882,16 @@ void
 TestTree::testIO()
 {
     const char* filename = "testIO.dbg";
-    boost::shared_ptr<const char> scopedFile(filename, ::remove);
+    boost::filesystem::path tmpDir = boost::filesystem::temp_directory_path();
+    tmpDir.append(filename);
+    boost::shared_ptr<const char> scopedFile(tmpDir.string().c_str(), ::remove);
     {
         ValueType background=5.0f;
         RootNodeType root_node(background);
         root_node.setValueOn(openvdb::Coord(5,10,20),0.234f);
         root_node.setValueOn(openvdb::Coord(50000,20000,30000),4.5678f);
 
-        std::ofstream os(filename, std::ios_base::binary);
+        std::ofstream os(tmpDir.string().c_str(), std::ios_base::binary);
         root_node.writeTopology(os);
         root_node.writeBuffers(os);
         CPPUNIT_ASSERT(!os.fail());
@@ -898,7 +901,7 @@ TestTree::testIO()
         RootNodeType root_node(background);
         ASSERT_DOUBLES_EXACTLY_EQUAL(background, root_node.getValue(openvdb::Coord(5,10,20)));
         {
-            std::ifstream is(filename, std::ios_base::binary);
+            std::ifstream is(tmpDir.string().c_str(), std::ios_base::binary);
             // Since the test file doesn't include a VDB header with file format version info,
             // tag the input stream explicitly with the current version number.
             openvdb::io::setCurrentVersion(is);
@@ -1656,16 +1659,16 @@ TestTree::testTopologyIntersection()
     }
 
     {// Test based on boolean grids
-        openvdb::CoordBBox big(  openvdb::Coord(-9), openvdb::Coord(10));
-        openvdb::CoordBBox small(openvdb::Coord( 1), openvdb::Coord(10));
+        openvdb::CoordBBox bigBox(  openvdb::Coord(-9), openvdb::Coord(10));
+        openvdb::CoordBBox smallBox(openvdb::Coord( 1), openvdb::Coord(10));
 
         openvdb::BoolGrid::Ptr gridBig = openvdb::BoolGrid::create(false);
-        gridBig->fill(big, true/*value*/, true /*make active*/);
+        gridBig->fill(bigBox, true/*value*/, true /*make active*/);
         CPPUNIT_ASSERT_EQUAL(8, int(gridBig->tree().activeTileCount()));
         CPPUNIT_ASSERT_EQUAL((20 * 20 * 20), int(gridBig->activeVoxelCount()));
 
         openvdb::BoolGrid::Ptr gridSmall = openvdb::BoolGrid::create(false);
-        gridSmall->fill(small, true/*value*/, true /*make active*/);
+        gridSmall->fill(smallBox, true/*value*/, true /*make active*/);
         CPPUNIT_ASSERT_EQUAL(0, int(gridSmall->tree().activeTileCount()));
         CPPUNIT_ASSERT_EQUAL((10 * 10 * 10), int(gridSmall->activeVoxelCount()));
 
