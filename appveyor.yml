@@ -35,7 +35,7 @@ install:
   - cd ../../OpenEXR
   - mkdir build
   - cd build
-  - cmake -G "%CMAKE_PLATFORM%" --config Release -DILMBASE_PACKAGE_PREFIX=C:/Program Files/ILMBase
+  - cmake -G "%CMAKE_PLATFORM%" --config Release -DILMBASE_PACKAGE_PREFIX="C:/Program Files/ILMBase"
   - cmake --build . --config Release
   - cmake --build . --config Release --target install
   - cd ../../..
