@@ -30,15 +30,19 @@ install:
   - mkdir build
   - cd build
   - cmake -G "%CMAKE_PLATFORM%" --config Release ..
-  - cmake --build . --config Release
+  #- cmake --build . --config Release
   - cmake --build . --config Release --target install
+  - dir C:\Sys
+  - dir C:\Sys\lib
+  - dir C:\Sys\include
   - cd ../../OpenEXR
   - mkdir build
   - cd build
-  - cmake -G "%CMAKE_PLATFORM%" --config Release -DILMBASE_PACKAGE_PREFIX="C:/Program Files/ILMBase"
-  - cmake --build . --config Release
+  - cmake -G "%CMAKE_PLATFORM%" --config Release -DILMBASE_PACKAGE_PREFIX="C:/Program Files/ILMBase" ..
+  #- cmake --build . --config Release
   - cmake --build . --config Release --target install
   - cd ../../..
+  - dir
 
   # Boost
   - set BOOST_ROOT=C:\Libraries\boost_1_59_0
