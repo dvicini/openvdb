@@ -7,8 +7,7 @@ configuration:
 platform:
     - x64
 environment:
-  matrix:
-      CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
+  CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
 
 install:
   # ZLIB
