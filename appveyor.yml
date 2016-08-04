@@ -14,7 +14,7 @@ install:
   - appveyor DownloadFile https://github.com/madler/zlib/archive/v1.2.8.tar.gz
   - 7z x v1.2.8.tar.gz -so | 7z x -si -ttar
   - cd zlib-1.2.8
-  - cmake -G "%CMAKE_PLATFORM%" . -DCMAKE_INSTALL_PREFIX=C:/Sys
+  - cmake -G "%CMAKE_PLATFORM%" . -DCMAKE_INSTALL_PREFIX=C:/zlib_1.2.8
   #- cmake --build . --config Release
   - cmake --build . --config Release --target install
   - cd ..
@@ -29,13 +29,13 @@ install:
   - cd IlmBase
   - mkdir build
   - cd build
-  - cmake -G "%CMAKE_PLATFORM%" --config Release ..
+  - cmake -G "%CMAKE_PLATFORM%" --config Release -DBUILD_SHARED_LIBS= -DCMAKE_INSTALL_PREFIX="C:/ilmbase" -DNAMESPACE_VERSIONING=0 ..
   #- cmake --build . --config Release
   - cmake --build . --config Release --target install
   - cd ../../OpenEXR
   - mkdir build
   - cd build
-  - cmake -G "%CMAKE_PLATFORM%" --config Release -DBUILD_SHARED_LIBS=0 -DCMAKE_INSTALL_PREFIX="C:/Program Files/openexr" -DILMBASE_PACKAGE_PREFIX="C:/Program Files/ilmBase" -DNAMESPACE_VERSIONING=0 -DUSE_ZLIB_WINAPI=0 -DZLIB_ROOT=C:\Sys\include ..
+  - cmake -G "%CMAKE_PLATFORM%" --config Release -DBUILD_SHARED_LIBS=0 -DCMAKE_INSTALL_PREFIX="C:/openexr" -DILMBASE_PACKAGE_PREFIX="C:/ilmBase" -DNAMESPACE_VERSIONING=0 -DUSE_ZLIB_WINAPI=0 -DZLIB_ROOT=C:\zlib_1.2.8 ..
   #- cmake --build . --config Release
   - cmake --build . --config Release --target install
   - cd ../../..
