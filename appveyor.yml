@@ -19,7 +19,7 @@ install:
   - cd c:/projects/openvdb/deps
 
   # GLEW
-  - appveyor DownloadFile http://downloads.sourceforge.net/project/glew/glew/2.0.0/glew-2.0.0-win32.zip
+  - appveyor DownloadFile http://downloads.sourceforge.net/project/glew/glew/1.10.0/glew-1.10.0-win32.zip
   - 7z x glew-1.10.0-win32.zip
   - cd glew-1.10.0-win32
   - dir
