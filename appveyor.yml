@@ -23,19 +23,17 @@ install:
   - 7z x v1.2.8.tar.gz -so | 7z x -si -ttar
   - cd zlib-1.2.8
   - cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib .
-  - cmake --build . --config Release --target install
+  - cmake --build --config Release --target install .
   - cd ..
 
   # Blosc
   - git clone -b v1.5.2 https://github.com/Blosc/c-blosc.git ./blosc
-  - dir
   - cd blosc
   - mkdir build
   - cd build
-  - dir
   - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_INSTALL_PREFIX=C:/blosc -DZLIB_ROOT=C:/zlib ..
   - cmake --build . --config Release --target install
-  - dir
+  - cd ..
 
   # OpenEXR and ILMBase
   - git clone -b v2.2.0 https://github.com/openexr/openexr.git ./openexr
@@ -55,6 +53,7 @@ install:
   # TBB
   - appveyor DownloadFile https://www.threadingbuildingblocks.org/sites/default/files/software_releases/windows/tbb44_20160526oss_win_0.zip
   - 7z x tbb44_20160526oss_win_0.zip
+  - dir
   - cd tbb44_20160526oss_win_0
   - dir
 
