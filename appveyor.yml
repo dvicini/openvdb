@@ -23,7 +23,7 @@ install:
   - 7z x v1.2.8.tar.gz -so | 7z x -si -ttar
   - cd zlib-1.2.8
   - cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib .
-  - cmake --build --config Release --target install .
+  - cmake --build . --config Release --target install
   - cd ..
 
   # Blosc
