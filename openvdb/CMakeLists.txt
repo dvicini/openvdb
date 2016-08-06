@@ -1,15 +1,15 @@
 message(STATUS "---configuring openvdb library---")
 
-set(BOOST_ROOT "C:/Boost/boost_1_57_0")
-set(BOOST_INCLUDEDIR "C:/Boost/boost_1_57_0")
-set(BOOST_LIBRARYDIR "C:/Boost/boost_1_57_0/lib")
+set(BOOST_ROOT "C:/Boost/boost_1_59_0")
+set(BOOST_INCLUDEDIR "C:/Boost/boost_1_59_0")
+set(BOOST_LIBRARYDIR "C:/Boost/boost_1_59_0/lib")
 
 set(Boost_DEBUG OFF)
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_RUNTIME OFF)
 
-find_package(boost 1.46.0 REQUIRED COMPONENTS iostreams system thread filesystem)
+find_package(Boost 1.59.0 REQUIRED COMPONENTS iostreams system thread filesystem)
 
 if(Boost_FOUND)
   message(STATUS "BOOST FOUND: " ${Boost_FOUND})
@@ -17,11 +17,14 @@ if(Boost_FOUND)
   message(STATUS "BOOST INCLUDE DIRS: " ${Boost_INCLUDE_DIR})
   message(STATUS "BOOST LIBRARY DIRS: " ${Boost_LIBRARY_DIR})
   message(STATUS "BOOST LIBRARIES: " ${Boost_LIBRARIES})
-  message(STATUS "BOOST system: " ${Boost_system_LIBRARY})
+  message(STATUS "BOOST iostreams: " ${Boost_IOSTREAMS_LIBRARY})
+  message(STATUS "BOOST system: " ${Boost_SYSTEM_LIBRARY})
+  message(STATUS "BOOST thread: " ${Boost_THREAD_LIBRARY})
+  message(STATUS "BOOST filesystem: " ${Boost_FILESYSTEM_LIBRARY})
 endif()
 
 # this is where my modules are located, change per site
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} c:/dev_local/CMake/Modules)
+#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} e:/library/development/CMake/Modules)
 
 set(ILMBase_ROOT "C:/Program Files/ILMBase")
 
@@ -38,7 +41,7 @@ endif()
 
 # using FindTBB.cmake from Pixar's OpenSubdiv project
 # https://github.com/PixarAnimationStudios/OpenSubdiv
-set(TBB_LOCATION "c:/dev_local/tbb/tbb41_20130116oss")
+set(TBB_LOCATION "e:/library/development/tbb/tbb44_20160526oss")
 
 find_package(tbb REQUIRED)
 
@@ -105,22 +108,17 @@ include_directories(
 add_library(openvdb ${SOURCE_FILES})
 
 target_link_libraries(openvdb
-    optimized ${BOOST_LIBRARYDIR}/libboost_iostreams-vc110-mt-1_57.lib
-    optimized ${BOOST_LIBRARYDIR}/libboost_system-vc110-mt-1_57.lib
-    optimized ${BOOST_LIBRARYDIR}/libboost_thread-vc110-mt-1_57.lib
+	${Boost_LIBRARIES}
+	${ZLIB_LIBRARIES}
     optimized ${ILMBASE_Half_LIBRARY}
+	debug ${ILMBASE_LIBRARY_DIRS}/Halfd.lib
     optimized ${TBB_tbb_LIBRARY}
     optimized ${TBB_tbbmalloc_LIBRARY}
     optimized ${TBB_tbbmalloc_proxy_LIBRARY}
-    ${ZLIB_LIBRARIES}
-    optimized ${BLOSC_STATIC_LIBRARY}
-    debug ${BOOST_LIBRARYDIR}/libboost_iostreams-vc110-mt-gd-1_57.lib
-    debug ${BOOST_LIBRARYDIR}/libboost_system-vc110-mt-gd-1_57.lib
-    debug ${BOOST_LIBRARYDIR}/libboost_thread-vc110-mt-gd-1_57.lib
-    debug ${ILMBASE_LIBRARY_DIRS}/Halfd.lib
-    debug ${TBB_tbb_debug_LIBRARY}
+	debug ${TBB_tbb_debug_LIBRARY}
     debug ${TBB_tbbmalloc_debug_LIBRARY}
     debug ${TBB_tbbmalloc_proxy_debug_LIBRARY}
+    optimized ${BLOSC_STATIC_LIBRARY}
     debug ${BLOSC_DEBUG_STATIC_LIBRARY})
 
 if(WIN32)
