@@ -56,7 +56,7 @@ install:
   - appveyor DownloadFile https://www.threadingbuildingblocks.org/sites/default/files/software_releases/windows/tbb44_20160526oss_win_0.zip
   - 7z x tbb44_20160526oss_win_0.zip
   - dir
-  - cd tbb44_20160526oss_win_0
+  - cd tbb44_20160526oss
   - dir
 
   # Boost
