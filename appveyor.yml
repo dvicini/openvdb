@@ -16,7 +16,7 @@ install:
   - appveyor DownloadFile https://github.com/glfw/glfw/releases/download/3.2/glfw-3.2.bin.WIN64.zip
   - 7z x glfw-3.2.bin.WIN64.zip
   - cd glfw-3.2.bin.WIN64
-  - cd ..
+  - cd c:/projects/openvdb/deps
 
   # ZLIB
   - appveyor DownloadFile https://github.com/madler/zlib/archive/v1.2.8.tar.gz
@@ -26,7 +26,7 @@ install:
   - cd build
   - cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib ..
   - cmake --build . --config Release --target install
-  - cd ../..
+  - cd c:/projects/openvdb/deps
 
   # Blosc
   - git clone -b v1.5.2 https://github.com/Blosc/c-blosc.git ./blosc
@@ -35,7 +35,7 @@ install:
   - cd build
   - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_INSTALL_PREFIX=C:/blosc -DZLIB_ROOT=C:/zlib ..
   - cmake --build . --config Release --target install
-  - cd ../..
+  - cd c:/projects/openvdb/deps
 
   # OpenEXR and ILMBase
   - git clone -b v2.2.0 https://github.com/openexr/openexr.git ./openexr
@@ -50,13 +50,15 @@ install:
   - cd build
   - cmake -G "%CMAKE_PLATFORM%" --config Release -DBUILD_SHARED_LIBS=0 -DCMAKE_INSTALL_PREFIX="C:/openexr" -DILMBASE_PACKAGE_PREFIX="C:/ilmBase" -DNAMESPACE_VERSIONING=0 -DUSE_ZLIB_WINAPI=0 -DZLIB_ROOT=C:/zlib ..
   - cmake --build . --config Release --target install
-  - cd ../../..
+  - cd c:/projects/openvdb/deps
 
   # TBB
   - appveyor DownloadFile https://www.threadingbuildingblocks.org/sites/default/files/software_releases/windows/tbb44_20160526oss_win_0.zip
   - 7z x tbb44_20160526oss_win_0.zip
   - dir
   - cd tbb44_20160526oss
+  - dir
+  - cd c:/projects/openvdb/deps
   - dir
 
   # Boost
