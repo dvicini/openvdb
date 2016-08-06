@@ -11,11 +11,12 @@ environment:
 
 install:
   # GLFW
+  - dir
+  - mkdir deps
+  - cd deps
   - appveyor DownloadFile https://github.com/glfw/glfw/releases/download/3.2/glfw-3.2.bin.WIN64.zip
   - 7z x glfw-3.2.bin.WIN64.zip
   - cd glfw-3.2.bin.WIN64
-  - dir
-  - cd ..
   - dir
 
   # ZLIB
@@ -29,10 +30,9 @@ install:
   # Blosc
   - git clone -b v1.5.2 https://github.com/Blosc/c-blosc.git ./blosc
   - cd blosc
-  - cmake -G "%CMAKE_PLATFORM" --config Release -DCMAKE_INSTALL_PREFIX=C:/blosc -DZLIB_ROOT=C:/zlib
+  - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_INSTALL_PREFIX=C:/blosc -DZLIB_ROOT=C:/zlib
   - cmake --build . --config Release --target install
   - dir
-  - cd ..
 
   # OpenEXR and ILMBase
   - git clone -b v2.2.0 https://github.com/openexr/openexr.git ./openexr
@@ -53,8 +53,6 @@ install:
   - appveyor DownloadFile https://www.threadingbuildingblocks.org/sites/default/files/software_releases/windows/tbb44_20160526oss_win_0.zip
   - 7z x tbb44_20160526oss_win_0.zip
   - cd tbb44_20160526oss_win_0
-  - dir
-  - cd ..
   - dir
 
   # Boost
