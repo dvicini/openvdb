@@ -145,7 +145,7 @@ TestMultiResGrid::testManualTopology()
 
     CPPUNIT_ASSERT(mrg != NULL);
     CPPUNIT_ASSERT_EQUAL(levels  , mrg->numLevels());
-    CPPUNIT_ASSERT_EQUAL(0UL,      mrg->finestLevel());
+    CPPUNIT_ASSERT_EQUAL(0ULL,      mrg->finestLevel());
     CPPUNIT_ASSERT_EQUAL(levels-1, mrg->coarsestLevel());
 
     // Define grid domain so they exactly overlap!
@@ -195,19 +195,19 @@ TestMultiResGrid::testManualTopology()
     CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, mrg->prolongateVoxel(ijk, 0), /*tolerance=*/ 0.0);
 
     // First check the coarsest level (3)
-    for (CoordBBox::Iterator<true> ijk(bbox>>3UL); ijk; ++ijk) {
+    for (CoordBBox::Iterator<true> ijk(bbox>>size_t(3)); ijk; ++ijk) {
         CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, mrg->tree(3).getValue(*ijk), /*tot=*/0.0);
     }
 
     // Prolongate from level 3 -> level 2 and check values
     mrg->prolongateActiveVoxels(2);
-    for (CoordBBox::Iterator<true> ijk(bbox>>2UL); ijk; ++ijk) {
+    for (CoordBBox::Iterator<true> ijk(bbox>>size_t(2)); ijk; ++ijk) {
         CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, mrg->tree(2).getValue(*ijk), /*tot=*/0.0);
     }
 
     // Prolongate from level 2 -> level 1 and check values
     mrg->prolongateActiveVoxels(1);
-    for (CoordBBox::Iterator<true> ijk(bbox>>1UL); ijk; ++ijk) {
+    for (CoordBBox::Iterator<true> ijk(bbox>>size_t(1)); ijk; ++ijk) {
         CPPUNIT_ASSERT_DOUBLES_EQUAL(3.0, mrg->tree(1).getValue(*ijk), /*tot=*/0.0);
     }
 
@@ -266,7 +266,7 @@ TestMultiResGrid::testIO()
     //mrg.print( std::cout, 3 );
 
     CPPUNIT_ASSERT_EQUAL(levels  , mrg.numLevels());
-    CPPUNIT_ASSERT_EQUAL(0UL     , mrg.finestLevel());
+    CPPUNIT_ASSERT_EQUAL(0ULL     , mrg.finestLevel());
     CPPUNIT_ASSERT_EQUAL(levels-1, mrg.coarsestLevel());
 
     // Check inside and outside values
