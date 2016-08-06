@@ -22,9 +22,8 @@ set(SOURCE_FILES ${H_FILES} ${CXX_FILES})
 add_executable(openvdb_test ${SOURCE_FILES})
 
 target_link_libraries(openvdb_test openvdb
-    optimized ${BOOST_LIBRARYDIR}/libboost_filesystem-vc110-mt-1_57.lib
+    ${Boost_LIBRARIES}
     optimized ${CPPUNIT_LIBRARY}
-    debug ${BOOST_LIBRARYDIR}/libboost_filesystem-vc110-mt-gd-1_57.lib
     debug ${CPPUNIT_DEBUG_LIBRARY})
 
 if(WIN32)
