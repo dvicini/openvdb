@@ -11,13 +11,12 @@ environment:
 
 install:
   # GLFW
-  - dir
   - mkdir deps
   - cd deps
   - appveyor DownloadFile https://github.com/glfw/glfw/releases/download/3.2/glfw-3.2.bin.WIN64.zip
   - 7z x glfw-3.2.bin.WIN64.zip
   - cd glfw-3.2.bin.WIN64
-  - dir
+  - cd ..
 
   # ZLIB
   - appveyor DownloadFile https://github.com/madler/zlib/archive/v1.2.8.tar.gz
@@ -29,7 +28,9 @@ install:
 
   # Blosc
   - git clone -b v1.5.2 https://github.com/Blosc/c-blosc.git ./blosc
+  - dir
   - cd blosc
+  - dir
   - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_INSTALL_PREFIX=C:/blosc -DZLIB_ROOT=C:/zlib
   - cmake --build . --config Release --target install
   - dir
