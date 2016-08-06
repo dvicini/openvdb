@@ -15,16 +15,26 @@ install:
   - 7z x glfw-3.2.bin.WIN64.zip
   - cd glfw-3.2.bin.WIN64
   - dir
+  - cd ..
+  - dir
 
   # ZLIB
   - appveyor DownloadFile https://github.com/madler/zlib/archive/v1.2.8.tar.gz
   - 7z x v1.2.8.tar.gz -so | 7z x -si -ttar
   - cd zlib-1.2.8
-  - cmake -G "%CMAKE_PLATFORM%" . -DCMAKE_INSTALL_PREFIX=C:/zlib_1.2.8
+  - cmake -G "%CMAKE_PLATFORM%" . -DCMAKE_INSTALL_PREFIX=C:/zlib
   - cmake --build . --config Release --target install
   - cd ..
 
-  # OpenEXR
+  # Blosc
+  - git clone -b v1.5.2 https://github.com/Blosc/c-blosc.git ./blosc
+  - cd blosc
+  - cmake -G "%CMAKE_PLATFORM" --config Release -DCMAKE_INSTALL_PREFIX=C:/blosc -DZLIB_ROOT=C:/zlib
+  - cmake --build . --config Release --target install
+  - dir
+  - cd ..
+
+  # OpenEXR and ILMBase
   - git clone -b v2.2.0 https://github.com/openexr/openexr.git ./openexr
   - cd openexr
   - cd IlmBase
@@ -35,9 +45,17 @@ install:
   - cd ../../OpenEXR
   - mkdir build
   - cd build
-  - cmake -G "%CMAKE_PLATFORM%" --config Release -DBUILD_SHARED_LIBS=0 -DCMAKE_INSTALL_PREFIX="C:/openexr" -DILMBASE_PACKAGE_PREFIX="C:/ilmBase" -DNAMESPACE_VERSIONING=0 -DUSE_ZLIB_WINAPI=0 -DZLIB_ROOT=C:\zlib_1.2.8 ..
+  - cmake -G "%CMAKE_PLATFORM%" --config Release -DBUILD_SHARED_LIBS=0 -DCMAKE_INSTALL_PREFIX="C:/openexr" -DILMBASE_PACKAGE_PREFIX="C:/ilmBase" -DNAMESPACE_VERSIONING=0 -DUSE_ZLIB_WINAPI=0 -DZLIB_ROOT=C:/zlib ..
   - cmake --build . --config Release --target install
   - cd ../../..
+
+  # TBB
+  - appveyor DownloadFile https://www.threadingbuildingblocks.org/sites/default/files/software_releases/windows/tbb44_20160526oss_win_0.zip
+  - 7z x tbb44_20160526oss_win_0.zip
+  - cd tbb44_20160526oss_win_0
+  - dir
+  - cd ..
+  - dir
 
   # Boost
   - set BOOST_ROOT=C:\Libraries\boost_1_59_0
