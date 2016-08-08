@@ -12,18 +12,14 @@ environment:
 install:
   - cd C:\Libraries\boost_1_59_0
   - dir
-  - cd lib64-msvc-14.0
+  - rename lib64-msvc-14.0 lib
   - dir
   - cd c:/projects/openvdb
 
-  # vfxcmake
+  # vfxcmake  
   - mkdir deps
   - cd deps
   - git clone https://github.com/caron/vfxcmake.git ./vfxcmake
-  - cd vfxcmake
-  - dir
-  - cd cmake
-  - dir
 
   # GLFW
   - appveyor DownloadFile https://github.com/glfw/glfw/releases/download/3.2/glfw-3.2.bin.WIN64.zip

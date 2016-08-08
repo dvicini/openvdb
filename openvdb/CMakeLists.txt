@@ -1,8 +1,8 @@
 message(STATUS "---configuring openvdb library---")
 
-set(BOOST_ROOT "C:/Boost/boost_1_59_0")
-set(BOOST_INCLUDEDIR "C:/Boost/boost_1_59_0")
-set(BOOST_LIBRARYDIR "C:/Boost/boost_1_59_0/lib")
+#set(BOOST_ROOT "C:/Boost/boost_1_59_0")
+#set(BOOST_INCLUDEDIR "C:/Boost/boost_1_59_0")
+#set(BOOST_LIBRARYDIR "C:/Boost/boost_1_59_0/lib")
 
 set(Boost_DEBUG OFF)
 set(Boost_USE_STATIC_LIBS ON)
