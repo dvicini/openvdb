@@ -37,6 +37,7 @@ install:
   - cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib ..
   - cmake --build . --config Release --target install
   - cd c:/projects/openvdb/deps
+  - set ZLIB_ROOT=C:/zlib
 
   # Blosc
   - git clone -b v1.5.2 https://github.com/Blosc/c-blosc.git ./blosc
@@ -46,6 +47,7 @@ install:
   - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_INSTALL_PREFIX=C:/blosc -DZLIB_ROOT=C:/zlib ..
   - cmake --build . --config Release --target install
   - cd c:/projects/openvdb/deps
+  - set BLOSC_ROOT=C:/blosc
 
   # OpenEXR and ILMBase
   - git clone -b v2.2.0 https://github.com/openexr/openexr.git ./openexr
@@ -61,6 +63,8 @@ install:
   - cmake -G "%CMAKE_PLATFORM%" --config Release -DBUILD_SHARED_LIBS=0 -DCMAKE_INSTALL_PREFIX="C:/openexr" -DILMBASE_PACKAGE_PREFIX="C:/ilmBase" -DNAMESPACE_VERSIONING=0 -DUSE_ZLIB_WINAPI=0 -DZLIB_ROOT=C:/zlib ..
   - cmake --build . --config Release --target install
   - cd c:/projects/openvdb/deps
+  - set ILMBase_ROOT=C:/ilmbase
+  - set OpenEXR_ROOT=C:/openexr
 
   # TBB
   - appveyor DownloadFile https://www.threadingbuildingblocks.org/sites/default/files/software_releases/windows/tbb44_20160526oss_win_0.zip
@@ -70,6 +74,7 @@ install:
   - dir
   - cd c:/projects/openvdb/deps
   - dir
+  - set TBB_ROOT_DIR=c:/projects/openvdb/deps/tbb44_20160526oss
 
   # Boost
   - set BOOST_ROOT=C:\Libraries\boost_1_59_0
