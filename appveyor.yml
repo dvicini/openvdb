@@ -82,7 +82,7 @@ build_script:
   - mkdir build
   - mkdir build\windows64
   - cd build\windows64
-  - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_MODULE_PATH=c:/projects/deps/vfxcmake/cmake ../..
+  - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_MODULE_PATH=C:/projects/openvdb/deps/vfxcmake/cmake ../..
   - dir c:\projects\openvdb
   - dir c:\projects\openvdb\build
   - dir c:\projects\openvdb\build\windows64
