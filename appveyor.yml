@@ -75,7 +75,7 @@ build_script:
   - mkdir build
   - mkdir build\windows64
   - cd build\windows64
-  - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_MODULE_PATH=C:/projects/openvdb/deps/vfxcmake/cmake -DILMBase_ROOT=c:/ilmbase -DOpenEXR_ROOT=c:/openexr -DTBB_ROOT_DIR=c:/projects/openvdb/deps/tbb44_20160526oss -DBLOSC_ROOT=c:/blosc ../..
+  - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_MODULE_PATH=C:/projects/openvdb/deps/vfxcmake/cmake -DILMBase_ROOT=c:/ilmbase -DOpenEXR_ROOT=c:/openexr -DTBB_ROOT_DIR=c:/projects/openvdb/deps/tbb44_20160526oss -DBLOSC_ROOT=c:/blosc -DZLIB_ROOT=c:/zlib ../..
   - dir c:\projects\openvdb
   - dir c:\projects\openvdb\build
   - dir c:\projects\openvdb\build\windows64
