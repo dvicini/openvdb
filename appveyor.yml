@@ -17,19 +17,14 @@ install:
   - mkdir deps
   - cd deps
   - git clone https://github.com/caron/vfxcmake.git ./vfxcmake
-  - cd vfxcmake/cmake
-  - dir
-  - cd c:/projects/openvdb/deps
 
   # GLFW
   - appveyor DownloadFile https://github.com/glfw/glfw/releases/download/3.2/glfw-3.2.bin.WIN64.zip
   - 7z x glfw-3.2.bin.WIN64.zip
-  - cd c:/projects/openvdb/deps
 
   # GLEW
   - appveyor DownloadFile http://downloads.sourceforge.net/project/glew/glew/1.10.0/glew-1.10.0-win32.zip
   - 7z x glew-1.10.0-win32.zip
-  - cd c:/projects/openvdb/deps
 
   # ZLIB
   - appveyor DownloadFile https://github.com/madler/zlib/archive/v1.2.8.tar.gz
@@ -40,7 +35,6 @@ install:
   - cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib ..
   - cmake --build . --config Release --target install
   - cd c:/projects/openvdb/deps
-  - set ZLIB_ROOT=C:/zlib
 
   # Blosc
   - git clone -b v1.5.2 https://github.com/Blosc/c-blosc.git ./blosc
@@ -50,7 +44,6 @@ install:
   - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_INSTALL_PREFIX=C:/blosc -DZLIB_ROOT=C:/zlib ..
   - cmake --build . --config Release --target install
   - cd c:/projects/openvdb/deps
-  - set BLOSC_ROOT=C:/blosc
 
   # OpenEXR and ILMBase
   - git clone -b v2.2.0 https://github.com/openexr/openexr.git ./openexr
@@ -65,23 +58,11 @@ install:
   - cd build
   - cmake -G "%CMAKE_PLATFORM%" --config Release -DBUILD_SHARED_LIBS=0 -DCMAKE_INSTALL_PREFIX="C:/openexr" -DILMBASE_PACKAGE_PREFIX="C:/ilmBase" -DNAMESPACE_VERSIONING=0 -DUSE_ZLIB_WINAPI=0 -DZLIB_ROOT=C:/zlib ..
   - cmake --build . --config Release --target install
-  - cd c:/ilmbase
-  - dir
-  - cd lib
-  - dir
   - cd c:/projects/openvdb/deps
-  - set ILMBase_ROOT=C:/ilmbase
-  - set OpenEXR_ROOT=C:/openexr
 
   # TBB
   - appveyor DownloadFile https://www.threadingbuildingblocks.org/sites/default/files/software_releases/windows/tbb44_20160526oss_win_0.zip
   - 7z x tbb44_20160526oss_win_0.zip
-  - dir
-  - cd tbb44_20160526oss
-  - dir
-  - cd c:/projects/openvdb/deps
-  - dir
-  - set TBB_ROOT_DIR=c:/projects/openvdb/deps/tbb44_20160526oss
 
   # Boost
   - set BOOST_ROOT=C:\Libraries\boost_1_59_0
@@ -94,7 +75,7 @@ build_script:
   - mkdir build
   - mkdir build\windows64
   - cd build\windows64
-  - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_MODULE_PATH=C:/projects/openvdb/deps/vfxcmake/cmake -DILMBase_ROOT=c:/ilmbase ../..
+  - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_MODULE_PATH=C:/projects/openvdb/deps/vfxcmake/cmake -DILMBase_ROOT=c:/ilmbase -DOpenEXR_ROOT=c:/openexr -DTBB_ROOT_DIR=c:/projects/openvdb/deps/tbb44_20160526oss -DBLOSC_ROOT=c:/blosc ../..
   - dir c:\projects\openvdb
   - dir c:\projects\openvdb\build
   - dir c:\projects\openvdb\build\windows64
