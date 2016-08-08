@@ -14,6 +14,7 @@ install:
   - dir
   - cd lib64-msvc-14.0
   - dir
+  - cd c:/projects/openvdb
 
   # vfxcmake
   - mkdir deps
