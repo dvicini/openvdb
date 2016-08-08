@@ -5,12 +5,10 @@ file(GLOB CXX_FILES *.cc)
 
 set(CPPUNIT_INCLUDE_DIR "e:/library/development/cppunit/cppunit-1.12.1/include")
 
-find_package(cppunit)
+find_package(CppUnit)
 
 if(CPPUNIT_FOUND)
   message(STATUS "CPPUNIT FOUND: " ${CPPUNIT_FOUND})
-  message(STATUS "CPPUNIT INCLUDE DIR: " ${CPPUNIT_INCLUDE_DIR})
-  message(STATUS "CPPUNIT LIBRARIES: " ${CPPUNIT_LIBRARIES})
 endif()
 
 include_directories(

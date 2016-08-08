@@ -14,17 +14,7 @@ find_package(Boost 1.59.0 REQUIRED COMPONENTS iostreams system thread filesystem
 if(Boost_FOUND)
   message(STATUS "BOOST FOUND: " ${Boost_FOUND})
   message(STATUS "BOOST VERSION: " ${Boost_VERSION})
-  message(STATUS "BOOST INCLUDE DIRS: " ${Boost_INCLUDE_DIR})
-  message(STATUS "BOOST LIBRARY DIRS: " ${Boost_LIBRARY_DIR})
-  message(STATUS "BOOST LIBRARIES: " ${Boost_LIBRARIES})
-  message(STATUS "BOOST iostreams: " ${Boost_IOSTREAMS_LIBRARY})
-  message(STATUS "BOOST system: " ${Boost_SYSTEM_LIBRARY})
-  message(STATUS "BOOST thread: " ${Boost_THREAD_LIBRARY})
-  message(STATUS "BOOST filesystem: " ${Boost_FILESYSTEM_LIBRARY})
 endif()
-
-# this is where my modules are located, change per site
-#set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} e:/library/development/CMake/Modules)
 
 set(ILMBase_ROOT "C:/Program Files/ILMBase")
 
@@ -33,45 +23,33 @@ find_package(ILMBase REQUIRED)
 if(ILMBASE_FOUND)
   message(STATUS "ILMBASE FOUND: " ${ILMBASE_FOUND})
   message(STATUS "ILMBASE VERSION: " ${ILMBASE_VERSION})
-  message(STATUS "ILMBASE INCLUDE DIRS: " ${ILMBASE_INCLUDE_DIRS})
-  message(STATUS "ILMBASE LIBRARY DIRS: " ${ILMBASE_LIBRARY_DIRS})
-  message(STATUS "ILMBASE LIBRARIES: " ${ILMBASE_LIBRARIES})
-  message(STATUS "ILMBASE HALF LIB: " ${ILMBASE_Half_LIBRARY})
 endif()
 
-# using FindTBB.cmake from Pixar's OpenSubdiv project
-# https://github.com/PixarAnimationStudios/OpenSubdiv
-set(TBB_LOCATION "e:/library/development/tbb/tbb44_20160526oss")
+set(TBB_ROOT_DIR "e:/library/development/tbb/tbb44_20160526oss")
 
-find_package(tbb REQUIRED)
+find_package(TBB REQUIRED)
 
 if(TBB_FOUND)
   message(STATUS "TBB FOUND: " ${TBB_FOUND})
   message(STATUS "TBB VERSION: " ${TBB_VERSION})
-  message(STATUS "TBB INCLUDE DIR: " ${TBB_INCLUDE_DIR})
-  message(STATUS "TBB LIBRARIES: " ${TBB_LIBRARIES})
 endif()
 
 set(ZLIB_ROOT "C:/Program Files/ZLIB")
 
-find_package(zlib REQUIRED)
+find_package(ZLIB REQUIRED)
 
 if(ZLIB_FOUND)
   message(STATUS "ZLIB FOUND: " ${ZLIB_FOUND})
   message(STATUS "ZLIB VERSION: " ${ZLIB_VERSION_STRING})
-  message(STATUS "ZLIB INCLUDE DIRS: " ${ZLIB_INCLUDE_DIRS})
-  message(STATUS "ZLIB LIBRARIES: " ${ZLIB_LIBRARIES})
 endif()
 
 set(BLOSC_ROOT "C:/Program Files/blosc")
 
-find_package(blosc)
+find_package(Blosc)
 
 if(BLOSC_FOUND)
   message(STATUS "BLOSC FOUND: " ${BLOSC_FOUND})
-  message(STATUS "BLOSC INCLUDE DIR: " ${BLOSC_INCLUDE_DIR})
-  message(STATUS "BLOSC LIBRARY: " ${BLOSC_LIBRARY})
-  message(STATUS "BLOSC STATIC LIBRARY: " ${BLOSC_STATIC_LIBRARY})
+  message(STATUS "BLOSC VERSION: " ${BLOSC_VERSION})
 endif()
 
 # collect source files
@@ -101,25 +79,20 @@ endif()
 include_directories(
     ${ILMBASE_INCLUDE_DIRS}
     ${Boost_INCLUDE_DIRS}
-    ${TBB_INCLUDE_DIR}
+    ${TBB_INCLUDE_DIRS}
     ${ZLIB_INCLUDE_DIRS}
-    ${BLOSC_INCLUDE_DIR})
+    ${BLOSC_INCLUDE_DIRS})
 
 add_library(openvdb ${SOURCE_FILES})
 
 target_link_libraries(openvdb
 	${Boost_LIBRARIES}
 	${ZLIB_LIBRARIES}
-    optimized ${ILMBASE_Half_LIBRARY}
+  optimized ${ILMBASE_Half_LIBRARY}
 	debug ${ILMBASE_LIBRARY_DIRS}/Halfd.lib
-    optimized ${TBB_tbb_LIBRARY}
-    optimized ${TBB_tbbmalloc_LIBRARY}
-    optimized ${TBB_tbbmalloc_proxy_LIBRARY}
-	debug ${TBB_tbb_debug_LIBRARY}
-    debug ${TBB_tbbmalloc_debug_LIBRARY}
-    debug ${TBB_tbbmalloc_proxy_debug_LIBRARY}
-    optimized ${BLOSC_STATIC_LIBRARY}
-    debug ${BLOSC_DEBUG_STATIC_LIBRARY})
+	${TBB_LIBRARIES}
+  optimized ${BLOSC_STATIC_LIBRARY}
+  debug ${BLOSC_DEBUG_STATIC_LIBRARY})
 
 if(WIN32)
   set_target_properties(openvdb
