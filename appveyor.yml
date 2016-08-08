@@ -12,7 +12,7 @@ environment:
 install:
   - cd C:\Libraries\boost_1_59_0
   - dir
-  - cd lib64-msvc-14
+  - cd lib64-msvc-14.0
   - dir
 
   # vfxcmake
@@ -23,7 +23,7 @@ install:
   - dir
   - cd cmake
   - dir
-  
+
   # GLFW
   - appveyor DownloadFile https://github.com/glfw/glfw/releases/download/3.2/glfw-3.2.bin.WIN64.zip
   - 7z x glfw-3.2.bin.WIN64.zip
