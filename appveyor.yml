@@ -10,16 +10,13 @@ environment:
   CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
 
 install:
-  - cd C:\Libraries\boost_1_59_0
-  - dir
-  - rename lib64-msvc-14.0 lib
-  - dir
-  - cd c:/projects/openvdb
-
   # vfxcmake  
   - mkdir deps
   - cd deps
   - git clone https://github.com/caron/vfxcmake.git ./vfxcmake
+  - cd vfxcmake/cmake
+  - dir
+  - cd c:/projects/openvdb/deps
 
   # GLFW
   - appveyor DownloadFile https://github.com/glfw/glfw/releases/download/3.2/glfw-3.2.bin.WIN64.zip
