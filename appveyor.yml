@@ -9,6 +9,9 @@ platform:
 environment:
   CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
 
+cache:
+  - c:/projects/openvdb/deps
+
 install:
   # vfxcmake  
   - mkdir deps
