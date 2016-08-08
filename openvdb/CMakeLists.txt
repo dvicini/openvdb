@@ -16,7 +16,8 @@ if(Boost_FOUND)
   message(STATUS "BOOST VERSION: " ${Boost_VERSION})
 endif()
 
-set(ILMBase_ROOT "C:/Program Files/ILMBase")
+#set(ILMBase_ROOT "C:/Program Files/ILMBase")
+message(STATUS "ilmbase root is " ${ILMBase_ROOT})
 
 find_package(ILMBase REQUIRED)
 
@@ -25,7 +26,7 @@ if(ILMBASE_FOUND)
   message(STATUS "ILMBASE VERSION: " ${ILMBASE_VERSION})
 endif()
 
-set(TBB_ROOT_DIR "e:/library/development/tbb/tbb44_20160526oss")
+#set(TBB_ROOT_DIR "e:/library/development/tbb/tbb44_20160526oss")
 
 find_package(TBB REQUIRED)
 
@@ -34,7 +35,7 @@ if(TBB_FOUND)
   message(STATUS "TBB VERSION: " ${TBB_VERSION})
 endif()
 
-set(ZLIB_ROOT "C:/Program Files/ZLIB")
+#set(ZLIB_ROOT "C:/Program Files/ZLIB")
 
 find_package(ZLIB REQUIRED)
 
@@ -43,7 +44,7 @@ if(ZLIB_FOUND)
   message(STATUS "ZLIB VERSION: " ${ZLIB_VERSION_STRING})
 endif()
 
-set(BLOSC_ROOT "C:/Program Files/blosc")
+#set(BLOSC_ROOT "C:/Program Files/blosc")
 
 find_package(Blosc)
 
