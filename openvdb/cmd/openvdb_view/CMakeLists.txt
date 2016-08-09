@@ -7,23 +7,34 @@ file(GLOB CXX_FILES *.cc
 
 set(SOURCE_FILES ${H_FILES} ${CXX_FILES})
 
-find_package(opengl)
-find_package(glew)
-find_package(glfw)
+find_package(OpenGL)
+find_package(GLEW)
+
+if(GLEW_FOUND)
+  message(STATUS "GLEW FOUND: " ${GLEW_FOUND})
+  #message(STATUS "GLEW VERSION: " ${GLEW_VERSION})
+endif()
+
+find_package(GLFW)
+
+if(GLFW_FOUND)
+  message(STATUS "GLFW FOUND: " ${GLFW_FOUND})
+  message(STATUS "GLFW VERSION: " ${GLFW_VERSION})
+endif()
 
 include_directories(
 	${OPENVDB_INCLUDE_DIR}
-	${GLFW_INCLUDE_DIRS}
-	${GLEW_INCLUDE_PATH})
+	${GLFW_INCLUDE_DIR}
+	${GLEW_INCLUDE_DIR})
 
 add_definitions(-D_USE_MATH_DEFINES -DOPENVDB_USE_GLFW_3 -DGLEW_STATIC) 
 
 add_executable(openvdb_view ${SOURCE_FILES})
 
 target_link_libraries(openvdb_view openvdb
-    ${OPENGL_LIBRARIES}
-    ${GLFW_LIBRARIES}
-	${GLEW_LIBRARY})
+   ${OPENGL_LIBRARIES}
+   ${GLFW_LIBRARIES}
+   ${GLEW_LIBRARY})
 
 if(WIN32)
   set_target_properties(openvdb_view

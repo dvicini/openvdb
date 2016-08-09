@@ -3,8 +3,6 @@ message(STATUS "---configuring openvdb_test executeable---")
 file(GLOB H_FILES *.h)
 file(GLOB CXX_FILES *.cc)
 
-set(CPPUNIT_INCLUDE_DIR "e:/library/development/cppunit/cppunit-1.12.1/include")
-
 find_package(CppUnit)
 
 if(CPPUNIT_FOUND)
@@ -22,7 +20,7 @@ add_executable(openvdb_test ${SOURCE_FILES})
 target_link_libraries(openvdb_test openvdb
     ${Boost_LIBRARIES}
     optimized ${CPPUNIT_LIBRARY}
-    debug ${CPPUNIT_DEBUG_LIBRARY})
+    )
 
 if(WIN32)
     set_target_properties(openvdb_test

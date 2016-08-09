@@ -4,8 +4,6 @@ file(GLOB H_FILES *.h)
 file(GLOB CXX_FILES *.cc)
 set(SOURCE_FILES ${H_FILES} ${CXX_FILES})
 
-set(OpenEXR_ROOT "C:/Program Files/OpenEXR")
-
 find_package(openexr REQUIRED)
 
 if(OPENEXR_FOUND)

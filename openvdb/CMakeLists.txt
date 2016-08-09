@@ -1,9 +1,5 @@
 message(STATUS "---configuring openvdb library---")
 
-#set(BOOST_ROOT "C:/Boost/boost_1_59_0")
-#set(BOOST_INCLUDEDIR "C:/Boost/boost_1_59_0")
-#set(BOOST_LIBRARYDIR "C:/Boost/boost_1_59_0/lib")
-
 set(Boost_DEBUG OFF)
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_MULTITHREADED ON)
@@ -16,17 +12,12 @@ if(Boost_FOUND)
   message(STATUS "BOOST VERSION: " ${Boost_VERSION})
 endif()
 
-#set(ILMBase_ROOT "C:/Program Files/ILMBase")
-message(STATUS "ilmbase root is " ${ILMBase_ROOT})
-
 find_package(ILMBase REQUIRED)
 
 if(ILMBASE_FOUND)
   message(STATUS "ILMBASE FOUND: " ${ILMBASE_FOUND})
   message(STATUS "ILMBASE VERSION: " ${ILMBASE_VERSION})
 endif()
-
-#set(TBB_ROOT_DIR "e:/library/development/tbb/tbb44_20160526oss")
 
 find_package(TBB REQUIRED)
 
@@ -35,16 +26,12 @@ if(TBB_FOUND)
   message(STATUS "TBB VERSION: " ${TBB_VERSION})
 endif()
 
-#set(ZLIB_ROOT "C:/Program Files/ZLIB")
-
 find_package(ZLIB REQUIRED)
 
 if(ZLIB_FOUND)
   message(STATUS "ZLIB FOUND: " ${ZLIB_FOUND})
   message(STATUS "ZLIB VERSION: " ${ZLIB_VERSION_STRING})
 endif()
-
-#set(BLOSC_ROOT "C:/Program Files/blosc")
 
 find_package(Blosc)
 
@@ -87,11 +74,11 @@ include_directories(
 add_library(openvdb ${SOURCE_FILES})
 
 target_link_libraries(openvdb
-	${Boost_LIBRARIES}
-	${ZLIB_LIBRARIES}
+  ${Boost_LIBRARIES}
+  ${ZLIB_LIBRARIES}
   optimized ${ILMBASE_Half_LIBRARY}
-	debug ${ILMBASE_LIBRARY_DIRS}/Halfd.lib
-	${TBB_LIBRARIES}
+  debug ${ILMBASE_LIBRARY_DIRS}/Halfd.lib
+  ${TBB_LIBRARIES}
   optimized ${BLOSC_STATIC_LIBRARY}
   debug ${BLOSC_DEBUG_STATIC_LIBRARY})
 
