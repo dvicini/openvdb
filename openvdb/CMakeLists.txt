@@ -77,10 +77,9 @@ target_link_libraries(openvdb
   ${Boost_LIBRARIES}
   ${ZLIB_LIBRARIES}
   optimized ${ILMBASE_Half_LIBRARY}
-  debug ${ILMBASE_LIBRARY_DIRS}/Halfd.lib
   ${TBB_LIBRARIES}
   optimized ${BLOSC_STATIC_LIBRARY}
-  debug ${BLOSC_DEBUG_STATIC_LIBRARY})
+  )
 
 if(WIN32)
   set_target_properties(openvdb
@@ -106,4 +105,4 @@ endforeach(HEADER HEADERS)
 add_subdirectory(cmd/openvdb_print)
 add_subdirectory(cmd/openvdb_view)
 add_subdirectory(cmd/openvdb_render)
-#add_subdirectory(unittest)
+add_subdirectory(unittest)
