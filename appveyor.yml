@@ -10,7 +10,7 @@ environment:
   CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
 
 cache:
-  - c:/projects/openvdb/deps -> appveyor.yml
+  - c:/projects/openvdb/deps/vfxcmake -> appveyor.yml
 
 install:
   - IF NOT EXIST %APPVEYOR_BUILD_FOLDER%/deps mkdir deps
