@@ -90,7 +90,7 @@ build_script:
   - mkdir build\windows64
   - cd build\windows64
   - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_MODULE_PATH=C:/projects/deps/vfxcmake/cmake -DCMAKE_INSTALL_PREFIX=c:/projects/openvdb/install -DILMBase_ROOT=c:/ilmbase -DOpenEXR_ROOT=c:/openexr -DTBB_USE_DEBUG_BUILD=0 -DTBB_ROOT_DIR=c:/projects/deps/tbb44_20160526oss -DBLOSC_ROOT=c:/blosc -DZLIB_ROOT=c:/zlib -DGLEW_LOCATION=C:/projects/deps/glew-1.10.0 -DGLFW_LOCATION=C:/projects/deps/glfw-3.2.bin.WIN64 -DCPPUNIT_INCLUDE_DIR=c:/cppunit/include ../..
-  - cmake --build . --config %CONFIGURATION%
+  - cmake --build . --config %CONFIGURATION% --target install
 
 artifacts:
   - path: install
