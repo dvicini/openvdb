@@ -70,6 +70,12 @@ install:
 
   # CppUnit
   - cd c:/projects/deps
+  - git clone -b feature/cmake git://anongit.freedesktop.org/libreoffice/cppunit ./cppunit
+  - cd CppUnit
+  - mkdir build
+  - cd build
+  - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_INSTALL_PREFIX=C:/cppunit -DBUILD_SHARED_LIBS=0 ..
+  - cmake --build . --config Release --target install
 
   # Boost
   - set BOOST_ROOT=C:\Libraries\boost_1_59_0
@@ -82,10 +88,7 @@ build_script:
   - mkdir build
   - mkdir build\windows64
   - cd build\windows64
-  - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_MODULE_PATH=C:/projects/deps/vfxcmake/cmake -DILMBase_ROOT=c:/ilmbase -DOpenEXR_ROOT=c:/openexr -DTBB_USE_DEBUG_BUILD=0 -DTBB_ROOT_DIR=c:/projects/deps/tbb44_20160526oss -DBLOSC_ROOT=c:/blosc -DZLIB_ROOT=c:/zlib -DGLEW_LOCATION=C:/projects/deps/glew-1.10.0 -DGLFW_LOCATION=C:/projects/deps/glfw-3.2.bin.WIN64 ../..
-  - dir c:\projects\openvdb
-  - dir c:\projects\openvdb\build
-  - dir c:\projects\openvdb\build\windows64
+  - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_MODULE_PATH=C:/projects/deps/vfxcmake/cmake -DILMBase_ROOT=c:/ilmbase -DOpenEXR_ROOT=c:/openexr -DTBB_USE_DEBUG_BUILD=0 -DTBB_ROOT_DIR=c:/projects/deps/tbb44_20160526oss -DBLOSC_ROOT=c:/blosc -DZLIB_ROOT=c:/zlib -DGLEW_LOCATION=C:/projects/deps/glew-1.10.0 -DGLFW_LOCATION=C:/projects/deps/glfw-3.2.bin.WIN64 -DCPPUNIT_INCLUDE_DIR=c:/cppunit/include ../..
   - cmake --build . --config %CONFIGURATION%
 
 matrix:
