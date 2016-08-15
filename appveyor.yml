@@ -85,11 +85,16 @@ install:
 build_script:
   - echo Running cmake...
   - cd c:\projects\openvdb
+  - mkdir install
   - mkdir build
   - mkdir build\windows64
   - cd build\windows64
-  - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_MODULE_PATH=C:/projects/deps/vfxcmake/cmake -DILMBase_ROOT=c:/ilmbase -DOpenEXR_ROOT=c:/openexr -DTBB_USE_DEBUG_BUILD=0 -DTBB_ROOT_DIR=c:/projects/deps/tbb44_20160526oss -DBLOSC_ROOT=c:/blosc -DZLIB_ROOT=c:/zlib -DGLEW_LOCATION=C:/projects/deps/glew-1.10.0 -DGLFW_LOCATION=C:/projects/deps/glfw-3.2.bin.WIN64 -DCPPUNIT_INCLUDE_DIR=c:/cppunit/include ../..
+  - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_MODULE_PATH=C:/projects/deps/vfxcmake/cmake -DCMAKE_INSTALL_PREFIX=c:/projects/openvdb/install -DILMBase_ROOT=c:/ilmbase -DOpenEXR_ROOT=c:/openexr -DTBB_USE_DEBUG_BUILD=0 -DTBB_ROOT_DIR=c:/projects/deps/tbb44_20160526oss -DBLOSC_ROOT=c:/blosc -DZLIB_ROOT=c:/zlib -DGLEW_LOCATION=C:/projects/deps/glew-1.10.0 -DGLFW_LOCATION=C:/projects/deps/glfw-3.2.bin.WIN64 -DCPPUNIT_INCLUDE_DIR=c:/cppunit/include ../..
   - cmake --build . --config %CONFIGURATION%
+
+artifacts:
+  - path: install
+    name: openvdb
 
 matrix:
     fast_finish: true
