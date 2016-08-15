@@ -71,7 +71,7 @@ install:
   # CppUnit
   - cd c:/projects/deps
   - git clone -b feature/cmake git://anongit.freedesktop.org/libreoffice/cppunit ./cppunit
-  - cd CppUnit
+  - cd cppunit
   - mkdir build
   - cd build
   - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_INSTALL_PREFIX=C:/cppunit -DBUILD_SHARED_LIBS=0 ..
