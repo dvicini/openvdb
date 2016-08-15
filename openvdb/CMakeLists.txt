@@ -19,7 +19,7 @@ if(ILMBASE_FOUND)
   message(STATUS "ILMBASE VERSION: " ${ILMBASE_VERSION})
 endif()
 
-find_package(TBB REQUIRED)
+find_package(TBB REQUIRED tbbmalloc tbbmalloc_proxy)
 
 if(TBB_FOUND)
   message(STATUS "TBB FOUND: " ${TBB_FOUND})
