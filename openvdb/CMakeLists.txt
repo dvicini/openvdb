@@ -88,7 +88,12 @@ if(WIN32)
 endif()
 
 install(TARGETS openvdb DESTINATION lib)
-#INSTALL(FILES ${H_FILES} DESTINATION include/openvdb)
+
+# install dependent tbb dlls into bin
+foreach(LIB ${TBB_LIBRARIES})
+  string(REPLACE "lib" "bin" DLL "${TBB_LIBRARIES}")
+  install(FILES ${DLL} DESTINATION bin)
+endforach(LIB)
 
 foreach(HEADER ${H_FILES})
   get_filename_component(DIR ${HEADER} PATH)
@@ -100,7 +105,7 @@ foreach(HEADER ${H_FILES})
   install(FILES ${HEADER} DESTINATION
         include/openvdb/${SUBDIR})
   endif()
-endforeach(HEADER HEADERS)
+endforeach(HEADER)
 
 add_subdirectory(cmd/openvdb_print)
 add_subdirectory(cmd/openvdb_view)
