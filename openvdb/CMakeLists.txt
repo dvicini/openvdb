@@ -93,7 +93,7 @@ install(TARGETS openvdb DESTINATION lib)
 foreach(LIB ${TBB_LIBRARIES})
   string(REPLACE "lib" "bin" DLL "${TBB_LIBRARIES}")
   install(FILES ${DLL} DESTINATION bin)
-endforach(LIB)
+endforeach(LIB)
 
 foreach(HEADER ${H_FILES})
   get_filename_component(DIR ${HEADER} PATH)
