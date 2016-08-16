@@ -91,7 +91,8 @@ install(TARGETS openvdb DESTINATION lib)
 
 # install dependent tbb dlls into bin
 foreach(LIB ${TBB_LIBRARIES})
-  string(REPLACE "/lib/" "/bin/" DLL "${TBB_LIBRARIES}")
+  string(REPLACE "/lib/" "/bin/" TEMP "${TBB_LIBRARIES}")
+  string(REPLACE ".lib" ".dll" DLL "${TEMP}")
   install(FILES ${DLL} DESTINATION bin)
 endforeach(LIB)
 
