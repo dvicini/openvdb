@@ -11,7 +11,7 @@ environment:
 
 cache:
   - c:/projects/deps/vfxcmake -> appveyor.yml
-  - c:/projects/deps/glfw-3.2.bin.WIN64 -> appveyor.yml
+  - c:/projects/deps/glfw-3.2.bin.WIN64.zip -> appveyor.yml
 
 install:
   - cd c:/projects
@@ -22,7 +22,7 @@ install:
   - IF NOT EXIST c:/projects/deps/vfxcmake git clone https://github.com/caron/vfxcmake.git ./vfxcmake
 
   # GLFW
-  - IF NOT EXIST c:/projects/deps/glfw-3.2.bin.WIN64 appveyor DownloadFile https://github.com/glfw/glfw/releases/download/3.2/glfw-3.2.bin.WIN64.zip
+  - IF NOT EXIST glfw-3.2.bin.WIN64 appveyor DownloadFile https://github.com/glfw/glfw/releases/download/3.2/glfw-3.2.bin.WIN64.zip
   - 7z x glfw-3.2.bin.WIN64.zip
 
   # GLEW
