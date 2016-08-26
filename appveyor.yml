@@ -10,17 +10,16 @@ environment:
   CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
 
 cache:
-  - c:/projects/deps/vfxcmake -> appveyor.yml
-  - c:/projects/deps/glfw-3.2.bin.WIN64.zip
-  - glew-1.10.0-win32.zip
+  - c:/projects/openvdb/deps/vfxcmake -> appveyor.yml
+  - c:/projects/openvdb/deps/glfw-3.2.bin.WIN64.zip
+  - c:/projects/openvdb/deps/glew-1.10.0-win32.zip
 
 install:
-  - cd c:/projects
   - dir
-  - IF NOT EXIST c:/projects/deps mkdir deps
+  - IF NOT EXIST c:/projects/openvdb/deps mkdir deps
   # vfxcmake  
   - cd deps
-  - IF NOT EXIST c:/projects/deps/vfxcmake git clone https://github.com/caron/vfxcmake.git ./vfxcmake
+  - IF NOT EXIST c:/projects/openvdb/deps/vfxcmake git clone https://github.com/caron/vfxcmake.git ./vfxcmake
 
   # GLFW
   - IF NOT EXIST glfw-3.2.bin.WIN64.zip appveyor DownloadFile https://github.com/glfw/glfw/releases/download/3.2/glfw-3.2.bin.WIN64.zip
@@ -39,7 +38,7 @@ install:
   - cd build
   - cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib ..
   - cmake --build . --config Release --target install
-  - cd c:/projects/deps
+  - cd c:/projects/openvdb/deps
 
   # Blosc
   - git clone -b v1.5.2 https://github.com/Blosc/c-blosc.git ./blosc
@@ -48,7 +47,7 @@ install:
   - cd build
   - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_INSTALL_PREFIX=C:/blosc -DZLIB_ROOT=C:/zlib ..
   - cmake --build . --config Release --target install
-  - cd c:/projects/deps
+  - cd c:/projects/openvdb/deps
 
   # OpenEXR and ILMBase
   - git clone -b v2.2.0 https://github.com/openexr/openexr.git ./openexr
@@ -63,7 +62,7 @@ install:
   - cd build
   - cmake -G "%CMAKE_PLATFORM%" --config Release -DBUILD_SHARED_LIBS=0 -DCMAKE_INSTALL_PREFIX="C:/openexr" -DILMBASE_PACKAGE_PREFIX="C:/ilmBase" -DNAMESPACE_VERSIONING=0 -DUSE_ZLIB_WINAPI=0 -DZLIB_ROOT=C:/zlib -DZLIB_INCLUDE_DIR=C:/zlib/include -DZLIB_LIBRARY=C:/zlib/lib/zlibstatic.lib ..
   - cmake --build . --config Release --target install
-  - cd c:/projects/deps
+  - cd c:/projects/openvdb/deps
 
   # TBB
   - appveyor DownloadFile https://www.threadingbuildingblocks.org/sites/default/files/software_releases/windows/tbb44_20160526oss_win_0.zip
@@ -71,7 +70,7 @@ install:
   - dir
 
   # CppUnit
-  - cd c:/projects/deps
+  - cd c:/projects/openvdb/deps
   - git clone -b feature/cmake git://anongit.freedesktop.org/libreoffice/cppunit ./cppunit
   - cd cppunit
   - mkdir build
@@ -91,7 +90,7 @@ build_script:
   - mkdir build
   - mkdir build\windows64
   - cd build\windows64
-  - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_MODULE_PATH=C:/projects/deps/vfxcmake/cmake -DCMAKE_INSTALL_PREFIX=c:/projects/openvdb/install -DILMBase_ROOT=c:/ilmbase -DOpenEXR_ROOT=c:/openexr -DTBB_USE_DEBUG_BUILD=0 -DTBB_ROOT_DIR=c:/projects/deps/tbb44_20160526oss -DBLOSC_ROOT=c:/blosc -DZLIB_ROOT=C:/zlib -DZLIB_INCLUDE_DIR=C:/zlib/include -DZLIB_LIBRARY=C:/zlib/lib/zlibstatic.lib -DGLEW_LOCATION=C:/projects/deps/glew-1.10.0 -DGLFW_LOCATION=C:/projects/deps/glfw-3.2.bin.WIN64 -DCPPUNIT_INCLUDE_DIR=c:/cppunit/include ../..
+  - cmake -G "%CMAKE_PLATFORM%" --config Release -DCMAKE_MODULE_PATH=C:/projects/openvdb/deps/vfxcmake/cmake -DCMAKE_INSTALL_PREFIX=c:/projects/openvdb/install -DILMBase_ROOT=c:/ilmbase -DOpenEXR_ROOT=c:/openexr -DTBB_USE_DEBUG_BUILD=0 -DTBB_ROOT_DIR=c:/projects/openvdb/deps/tbb44_20160526oss -DBLOSC_ROOT=c:/blosc -DZLIB_ROOT=C:/zlib -DZLIB_INCLUDE_DIR=C:/zlib/include -DZLIB_LIBRARY=C:/zlib/lib/zlibstatic.lib -DGLEW_LOCATION=C:/projects/openvdb/deps/glew-1.10.0 -DGLFW_LOCATION=C:/projects/openvdb/deps/glfw-3.2.bin.WIN64 -DCPPUNIT_INCLUDE_DIR=c:/cppunit/include ../..
   - cmake --build . --config %CONFIGURATION% --target install
 
 artifacts:
