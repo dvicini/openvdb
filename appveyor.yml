@@ -11,8 +11,8 @@ environment:
 
 cache:
   - c:/projects/openvdb/deps/vfxcmake -> appveyor.yml
-  - c:/projects/openvdb/deps/glfw-3.2.bin.WIN64.zip
-  - c:/projects/openvdb/deps/glew-1.10.0-win32.zip
+  - c:/projects/openvdb/deps/glfw-3.2.bin.WIN64.zip -> appveyor.yml
+  - c:/projects/openvdb/deps/glew-1.10.0-win32.zip -> appveyor.yml
 
 install:
   - dir
@@ -22,7 +22,9 @@ install:
   - IF NOT EXIST c:/projects/openvdb/deps/vfxcmake git clone https://github.com/caron/vfxcmake.git ./vfxcmake
 
   # GLFW
+  - IF EXIST glfw-3.2.bin.WIN64.zip echo [DEBUG] FOUND ZIP FILE BEFORE DOWNLOAD
   - IF NOT EXIST glfw-3.2.bin.WIN64.zip appveyor DownloadFile https://github.com/glfw/glfw/releases/download/3.2/glfw-3.2.bin.WIN64.zip
+  - IF EXIST glfw-3.2.bin.WIN64.zip echo [DEBUG] FOUND ZIP FILE AFTER DOWNLOAD
   - 7z x glfw-3.2.bin.WIN64.zip
 
   # GLEW
