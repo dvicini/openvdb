@@ -12,6 +12,7 @@ environment:
 cache:
   - c:/projects/deps/vfxcmake -> appveyor.yml
   - c:/projects/deps/glfw-3.2.bin.WIN64.zip
+  - glew-1.10.0-win32.zip
 
 install:
   - cd c:/projects
@@ -26,8 +27,9 @@ install:
   - 7z x glfw-3.2.bin.WIN64.zip
 
   # GLEW
-  - appveyor DownloadFile http://downloads.sourceforge.net/project/glew/glew/1.10.0/glew-1.10.0-win32.zip
+  - IF NOT EXIST glew-1.10.0-win32.zip appveyor DownloadFile http://downloads.sourceforge.net/project/glew/glew/1.10.0/glew-1.10.0-win32.zip
   - 7z x glew-1.10.0-win32.zip
+  - dir
 
   # ZLIB
   - appveyor DownloadFile https://github.com/madler/zlib/archive/v1.2.8.tar.gz
