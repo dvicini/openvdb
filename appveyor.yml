@@ -45,8 +45,12 @@ install:
         cd build
         cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib ..
         cmake --build . --config Release --target install
+    ) ELSE (
+        cd zlib-1.2.8
+        cd build
+        cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib ..
+        cmake --build . --config Release --target install
     )
-  - cmake --build . --config Release --target install
   - cd c:/projects/openvdb/deps
 
   # Blosc
