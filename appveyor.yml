@@ -37,6 +37,10 @@ install:
 
   # ZLIB
   - IF EXIST zlib-1.2.8 ECHO [DEBUG] FOUND ZLIB DIR
+  - cd zlib-1.2.8
+  - dir
+  - cd build
+  - dir
   - IF NOT EXIST zlib-1.2.8 (
         appveyor DownloadFile https://github.com/madler/zlib/archive/v1.2.8.tar.gz
         7z x v1.2.8.tar.gz -so | 7z x -si -ttar
