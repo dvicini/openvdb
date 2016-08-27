@@ -111,5 +111,4 @@ endforeach(HEADER)
 add_subdirectory(cmd/openvdb_print)
 add_subdirectory(cmd/openvdb_view)
 add_subdirectory(cmd/openvdb_render)
-# skipping unittest while debugging appveyor
 #add_subdirectory(unittest)
