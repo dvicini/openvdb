@@ -44,12 +44,12 @@ install:
         mkdir build
         cd build
     ) ELSE (
-        echo ELSE!
         cd zlib-1.2.8
+        dir
         cd build
     )
   - dir
-  - cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib ..
+  #- cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib ..
   - cmake --build . --config Release --target install
   - cd c:/projects/openvdb/deps
 
