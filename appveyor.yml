@@ -13,7 +13,7 @@ cache:
   - deps/vfxcmake
   - deps/glfw-3.2.bin.WIN64.zip
   - deps/glew-1.10.0-win32.zip
-  - deps/zlib-1.2.8 -> appveyor.yml
+  - deps/v1.2.8.tar.gz
 
 install:
   - dir
@@ -36,34 +36,12 @@ install:
   - dir
 
   # ZLIB
-  - dir
-  - cmd: >-
-      dir
-      
-      IF NOT EXIST zlib-1.2.8 (
-      
-        appveyor DownloadFile https://github.com/madler/zlib/archive/v1.2.8.tar.gz
-        
-        7z x v1.2.8.tar.gz -so | 7z x -si -ttar
-        
-        cd zlib-1.2.8
-        
-        mkdir build
-        
-        cd build
-        
-        cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib ..
-        
-      ) ELSE (
-          
-        cd zlib-1.2.8
-        
-        dir
-        
-        cd build
-        
-      )
-      
+  - IF NOT EXIST v1.2.8.tar.gz appveyor DownloadFile https://github.com/madler/zlib/archive/v1.2.8.tar.gz
+  - 7z x v1.2.8.tar.gz -so | 7z x -si -ttar
+  - cd zlib-1.2.8
+  - mkdir build
+  - cd build
+  - cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib ..
   - cmake --build . --config Release --target install
   - cd c:/projects/openvdb/deps
 
