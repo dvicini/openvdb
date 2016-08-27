@@ -36,7 +36,7 @@ install:
   - dir
 
   # ZLIB
-  - IF EXIST zlib-1.2.8 ECHO [DEBUG] FOUND ZLIB ZIP FILE BEFORE DOWNLOAD
+  - IF EXIST zlib-1.2.8 ECHO [DEBUG] FOUND ZLIB DIR
   - IF NOT EXIST zlib-1.2.8 (
         appveyor DownloadFile https://github.com/madler/zlib/archive/v1.2.8.tar.gz
         7z x v1.2.8.tar.gz -so | 7z x -si -ttar
@@ -46,6 +46,7 @@ install:
         cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib ..
         cmake --build . --config Release --target install
     )
+  - cmake --build . --config Release --target install
   - cd c:/projects/openvdb/deps
 
   # Blosc
