@@ -37,7 +37,7 @@ install:
 
   # ZLIB
   - dir
-  - cmd: >-
+  - cmd: |
       dir
       IF NOT EXIST zlib-1.2.8 (
         appveyor DownloadFile https://github.com/madler/zlib/archive/v1.2.8.tar.gz
