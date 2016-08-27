@@ -10,9 +10,9 @@ environment:
   CMAKE_PLATFORM: "Visual Studio 14 2015 Win64"
 
 cache:
-  - deps/vfxcmake -> appveyor.yml
-  - deps/glfw-3.2.bin.WIN64.zip -> appveyor.yml
-  - deps/glew-1.10.0-win32.zip -> appveyor.yml
+  - deps/vfxcmake
+  - deps/glfw-3.2.bin.WIN64.zip
+  - deps/glew-1.10.0-win32.zip
   - deps/zlib-1.2.8
 
 install:
@@ -25,7 +25,7 @@ install:
   - IF NOT EXIST c:/projects/openvdb/deps/vfxcmake git clone https://github.com/caron/vfxcmake.git ./vfxcmake
 
   # GLFW
-  - IF EXIST glfw-3.2.bin.WIN64.zip echo [DEBUG] FOUND GLFW IP FILE BEFORE DOWNLOAD
+  - IF EXIST glfw-3.2.bin.WIN64.zip echo [DEBUG] FOUND GLFW ZIP FILE BEFORE DOWNLOAD
   - IF NOT EXIST glfw-3.2.bin.WIN64.zip appveyor DownloadFile https://github.com/glfw/glfw/releases/download/3.2/glfw-3.2.bin.WIN64.zip
   - 7z x glfw-3.2.bin.WIN64.zip
 
@@ -36,14 +36,16 @@ install:
   - dir
 
   # ZLIB
-  - IF EXIST v1.2.8.tar.gz echo [DEBUG] FOUND ZLIB ZIP FILE BEFORE DOWNLOAD
-  - IF NOT EXIST v1.2.8.tar.gz appveyor DownloadFile https://github.com/madler/zlib/archive/v1.2.8.tar.gz
-  - 7z x v1.2.8.tar.gz -so | 7z x -si -ttar
-  - cd zlib-1.2.8
-  - mkdir build
-  - cd build
-  - cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib ..
-  - cmake --build . --config Release --target install
+  - IF EXIST zlib-1.2.8 ECHO [DEBUG] FOUND ZLIB ZIP FILE BEFORE DOWNLOAD
+  - IF NOT EXIST zlib-1.2.8 (
+        appveyor DownloadFile https://github.com/madler/zlib/archive/v1.2.8.tar.gz
+        7z x v1.2.8.tar.gz -so | 7z x -si -ttar
+        cd zlib-1.2.8
+        mkdir build
+        cd build
+        cmake -G "%CMAKE_PLATFORM%" -DCMAKE_INSTALL_PREFIX=C:/zlib ..
+        cmake --build . --config Release --target install
+    )
   - cd c:/projects/openvdb/deps
 
   # Blosc
