@@ -18,9 +18,9 @@ add_definitions()
 add_executable(openvdb_render ${SOURCE_FILES})
 
 target_link_libraries(openvdb_render openvdb
-    optimized ${ILMBASE_IlmThread_LIBRARY}
-    optimized ${ILMBASE_Iex_LIBRARY}
-    optimized ${OPENEXR_IlmImf_LIBRARY}
+    ${ILMBASE_IlmThread_LIBRARY}
+    ${ILMBASE_Iex_LIBRARY}
+    ${OPENEXR_IlmImf_LIBRARY}
     )
 
 install(TARGETS openvdb_render DESTINATION bin)

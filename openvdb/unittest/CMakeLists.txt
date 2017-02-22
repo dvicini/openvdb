@@ -17,10 +17,24 @@ set(SOURCE_FILES ${H_FILES} ${CXX_FILES})
 
 add_executable(openvdb_test ${SOURCE_FILES})
 
-target_link_libraries(openvdb_test openvdb
-    ${Boost_LIBRARIES}
-    optimized ${CPPUNIT_LIBRARY}
-    )
+if(CMAKE_BUILD_TYPE MATCHES "(Debug|DEBUG|debug|RelWithDebInfo|RELWITHDEBINFO|relwithdebinfo)")
+  set(CPPUNIT_DEBUG_BUILD TRUE)
+else()
+  set(CPPUNIT_DEBUG_BUILD FALSE)
+endif()
+
+if (CPPUNIT_DEBUG_BUILD)
+  target_link_libraries(openvdb_test openvdb
+      ${Boost_LIBRARIES}
+	  ${CPPUNIT_DEBUG_LIBRARY}
+      )
+else()
+  target_link_libraries(openvdb_test openvdb
+      ${Boost_LIBRARIES}
+      ${CPPUNIT_LIBRARY}
+      )
+endif()
+
 
 if(WIN32)
     set_target_properties(openvdb_test

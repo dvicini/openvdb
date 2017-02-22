@@ -76,9 +76,9 @@ add_library(openvdb ${SOURCE_FILES})
 target_link_libraries(openvdb
   ${Boost_LIBRARIES}
   ${ZLIB_LIBRARIES}
-  optimized ${ILMBASE_Half_LIBRARY}
+  ${ILMBASE_Half_LIBRARY}
   ${TBB_LIBRARIES}
-  optimized ${BLOSC_STATIC_LIBRARY}
+  ${BLOSC_STATIC_LIBRARY}
   )
 
 if(WIN32)
